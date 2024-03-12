@@ -9,16 +9,24 @@ public class TileController : MonoBehaviour
     public int cover;
     public bool walkable;
     public bool sightBlock;
+    public Vector2Int coords;
+    public OverlayController overlay;
+    public MapController map;
     // Start is called before the first frame update
     void Start()
     {
-        
+        map = GetComponentInParent<MapController>();
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void Setcoords(Vector2Int givenCoords)
+    {
+        coords = givenCoords;
     }
 
     public void Highlight()
