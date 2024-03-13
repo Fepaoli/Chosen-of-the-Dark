@@ -6,12 +6,30 @@ using UnityEngine.XR;
 
 public class StateManager : MonoBehaviour
 {
+    private static StateManager SMinstance;
+    public static StateManager Instance
+    {
+        get
+        {
+            if (SMinstance == null)
+            {
+                Debug.Log("No manager?");
+            }
+
+            return SMinstance;
+        }
+    }
     public Canvas UI;
     public static IState currentState;
     public delegate void SwitchTo (StateList state);
     public static event SwitchTo ChangeState;
     public StateList stateType;
     // Start is called before the first frame update
+
+    private void Awake()
+    {
+        SMinstance = this;
+    }
     void Start()
     {
         currentState = new MainMenu();
@@ -30,6 +48,7 @@ public class StateManager : MonoBehaviour
                     currentState.EnterState();
                     break;
                 case StateList.battleStart:
+                    Debug.Log("Nice");
                     currentState = new Playstart();
                     currentState.EnterState();
                     break;
@@ -47,6 +66,11 @@ public class StateManager : MonoBehaviour
                     break;
             }
         }
+    }
+
+    public void UpdateState(StateList state)
+    {
+        stateType = state;
     }
 }
 
