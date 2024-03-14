@@ -13,6 +13,11 @@ public class MapController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        StateManager.Instance.OnBattleStart.AddListener(MapSetup);
+        gameObject.SetActive(false);
+    }
+
+    public void MapSetup(){
         map = new Dictionary<Vector2Int, TileController>();
         Generate();
     }
@@ -42,6 +47,7 @@ public class MapController : MonoBehaviour
                 map.Add(coords, createdController);
             }
         }
+        StateManager.Instance.UpdateState(StateList.newround);
     }
 
     public Vector2Int WorldToGrid(Vector3 coordinates)

@@ -44,5 +44,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 600b64ed21a7f7d489e957e474004bfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UI: {fileID: 0}
+  OnMenuReturn:
+    m_PersistentCalls:
+      m_Calls: []
+  OnBattleStart:
+    m_PersistentCalls:
+      m_Calls: []
+  OnRoundStart:
+    m_PersistentCalls:
+      m_Calls: []
+  OnTurnStart:
+    m_PersistentCalls:
+      m_Calls: []
+  OnEnemyTurnStart:
+    m_PersistentCalls:
+      m_Calls: []
+  OnBattleEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  UI: {fileID: 1354052827220121735, guid: 490e08fd67d7e0d4a8d97e271195116b, type: 3}
+  map: {fileID: 5570373655019138700, guid: 80966bfd743782149b49f011079dfad0, type: 3}
+  creatures: {fileID: 0}
   stateType: 0

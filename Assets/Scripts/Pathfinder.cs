@@ -17,19 +17,29 @@ public class Pathfinder : MonoBehaviour
 
     public void Start()
     {
+        StateManager.Instance.OnRoundStart.AddListener(CreatePathfindingMap);
+        StateManager.Instance.OnBattleStart.AddListener(InitMap);
+        gameObject.SetActive(false);
+    }
+
+    public void InitMap(){
+        gameObject.SetActive(true);
         coords = new Vector2Int(0,0);
         speed = 10;
         map = mapFunctions.map;
-        CreatePathfindingMap();
-        DefinePaths(coords, speed);
+        pathfindingMap = new Dictionary<Vector2Int, PathfindingGrid>();
     }
 
     public void CreatePathfindingMap()
     {
+        coords = new Vector2Int(1,1);
+        speed = 10;
+        map = mapFunctions.map;
         foreach (TileController x in map.Values)
         {
             pathfindingMap.Add(x.coords, new PathfindingGrid(x.overlay, 300));
         }
+        DefinePaths(coords, speed);
     }
     public void DefinePaths(Vector2Int position, float movespeed)
     {
@@ -37,8 +47,6 @@ public class Pathfinder : MonoBehaviour
         List<PathfindingGrid> Q = new List<PathfindingGrid>();
         foreach (Vector2Int x in pathfindingMap.Keys)
         {
-            OverlayController overlay = pathfindingMap[x].overlay;
-            pathfindingMap[x] = new PathfindingGrid(overlay, 300);
             Q.Add(pathfindingMap[x]);
         }
 
@@ -71,14 +79,14 @@ public class Pathfinder : MonoBehaviour
     public List<PathfindingGrid> FindNeighbours (Vector2Int position)
     {
         List<PathfindingGrid> neighbours = new List<PathfindingGrid>();
-        if (pathfindingMap.ContainsKey(position + new Vector2Int(1, 0))) { neighbours.Add(pathfindingMap[new Vector2Int(1,0)]); }
-        if (pathfindingMap.ContainsKey(position + new Vector2Int(-1, 0))) { neighbours.Add(pathfindingMap[new Vector2Int(-1, 0)]); }
-        if (pathfindingMap.ContainsKey(position + new Vector2Int(0, 1))) { neighbours.Add(pathfindingMap[new Vector2Int(0, 1)]); }
-        if (pathfindingMap.ContainsKey(position + new Vector2Int(0, -1))) { neighbours.Add(pathfindingMap[new Vector2Int(0, -1)]); }
-        if (pathfindingMap.ContainsKey(position + new Vector2Int(1, 1))) { neighbours.Add(pathfindingMap[new Vector2Int(1, 1)]); }
-        if (pathfindingMap.ContainsKey(position + new Vector2Int(-1, 1))) { neighbours.Add(pathfindingMap[new Vector2Int(-1, 1)]); }
-        if (pathfindingMap.ContainsKey(position + new Vector2Int(1, -1))) { neighbours.Add(pathfindingMap[new Vector2Int(1, -1)]); }
-        if (pathfindingMap.ContainsKey(position + new Vector2Int(-1, -1))) { neighbours.Add(pathfindingMap[new Vector2Int(-1, -1)]); }
+        if (pathfindingMap.ContainsKey(position + new Vector2Int(1, 0))) { neighbours.Add(pathfindingMap[position + new Vector2Int(1,0)]); }
+        if (pathfindingMap.ContainsKey(position + new Vector2Int(-1, 0))) { neighbours.Add(pathfindingMap[position + new Vector2Int(-1, 0)]); }
+        if (pathfindingMap.ContainsKey(position + new Vector2Int(0, 1))) { neighbours.Add(pathfindingMap[position + new Vector2Int(0, 1)]); }
+        if (pathfindingMap.ContainsKey(position + new Vector2Int(0, -1))) { neighbours.Add(pathfindingMap[position + new Vector2Int(0, -1)]); }
+        if (pathfindingMap.ContainsKey(position + new Vector2Int(1, 1))) { neighbours.Add(pathfindingMap[position + new Vector2Int(1, 1)]); }
+        if (pathfindingMap.ContainsKey(position + new Vector2Int(-1, 1))) { neighbours.Add(pathfindingMap[position + new Vector2Int(-1, 1)]); }
+        if (pathfindingMap.ContainsKey(position + new Vector2Int(1, -1))) { neighbours.Add(pathfindingMap[position + new Vector2Int(1, -1)]); }
+        if (pathfindingMap.ContainsKey(position + new Vector2Int(-1, -1))) { neighbours.Add(pathfindingMap[position + new Vector2Int(-1, -1)]); }
         return neighbours;
     }
     public struct PathfindingGrid

@@ -2,10 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.XR;
 
 public class StateManager : MonoBehaviour
 {
+    public UnityEvent OnMenuReturn;
+    public UnityEvent OnBattleStart;
+    public UnityEvent OnRoundStart;
+    public UnityEvent OnTurnStart;
+    public UnityEvent OnEnemyTurnStart;
+    public UnityEvent OnBattleEnd;
+
+
+    public Canvas UI;
+    public GameObject map;
+
+    public GameObject creatures;
+
+    public static IState currentState;
+    public StateList stateType;
     private static StateManager SMinstance;
     public static StateManager Instance
     {
@@ -15,16 +31,9 @@ public class StateManager : MonoBehaviour
             {
                 Debug.Log("No manager?");
             }
-
             return SMinstance;
         }
     }
-    public Canvas UI;
-    public static IState currentState;
-    public delegate void SwitchTo (StateList state);
-    public static event SwitchTo ChangeState;
-    public StateList stateType;
-    // Start is called before the first frame update
 
     private void Awake()
     {
@@ -47,8 +56,13 @@ public class StateManager : MonoBehaviour
                     currentState = new Playend();
                     currentState.EnterState();
                     break;
+                case StateList.newround:
+                    Debug.Log("Starting round!");
+                    currentState = new RoundStart();
+                    currentState.EnterState();
+                    break;
                 case StateList.battleStart:
-                    Debug.Log("Nice");
+                    Debug.Log("Starting battle!");
                     currentState = new Playstart();
                     currentState.EnterState();
                     break;
@@ -78,7 +92,7 @@ public class MainMenu : IState
 {
     public StateList stateType = StateList.menu;
     void IState.EnterState(){
-
+        StateManager.Instance.OnMenuReturn.Invoke();
     }
     void IState.SwitchState(IState switchTo){
 
@@ -88,11 +102,26 @@ public class MainMenu : IState
     }
 }
 
+public class RoundStart : IState
+{
+    public StateList stateType = StateList.newround;
+    void IState.EnterState(){
+        StateManager.Instance.creatures.SetActive(true);
+        StateManager.Instance.OnRoundStart.Invoke();
+    }
+    void IState.SwitchState(IState switchTo){
+
+    }
+    StateList IState.GetType(){
+        return stateType;
+    }
+}
 public class Playstart : IState
 {
     public StateList stateType = StateList.battleStart;
     void IState.EnterState(){
-
+        StateManager.Instance.map.SetActive(true);
+        StateManager.Instance.OnBattleStart.Invoke();
     }
     void IState.SwitchState(IState switchTo){
 
@@ -106,7 +135,7 @@ public class Playend : IState
 {
     public StateList stateType = StateList.battleEnd;
     void IState.EnterState(){
-
+        StateManager.Instance.OnBattleEnd.Invoke();
     }
     void IState.SwitchState(IState switchTo){
 
@@ -120,7 +149,7 @@ public class PlayerTurn : IState
 {
     public StateList stateType = StateList.goodTurn;
     void IState.EnterState(){
-
+        StateManager.Instance.OnTurnStart.Invoke();
     }
     void IState.SwitchState(IState switchTo){
 
@@ -137,7 +166,7 @@ public class EnemyTurn : IState
     public StateList stateType = StateList.evilTurn;
 
     void IState.EnterState(){
-
+        StateManager.Instance.OnEnemyTurnStart.Invoke();
     }
     void IState.SwitchState(IState switchTo){
 
@@ -150,6 +179,7 @@ public class EnemyTurn : IState
 public enum StateList{
     menu,
     battleStart,
+    newround,
     goodTurn,
     evilTurn,
     battleEnd
