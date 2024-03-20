@@ -30,6 +30,16 @@ public class Pathfinder : MonoBehaviour
         pathfindingMap = new Dictionary<Vector2Int, PathfindingGrid>();
     }
 
+    public void MoveTo(Vector2Int targetCoords)
+    {
+
+    }
+
+    public bool IsTileReachable(Vector2Int coords)
+    {
+        return (pathfindingMap[coords].distance <= speed) && (map[coords].walkable);
+    }
+
     public void CreatePathfindingMap()
     {
         coords = new Vector2Int(1,1);

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 161754901845276240}
   - component: {fileID: 5040468853467298685}
   - component: {fileID: -5793677955230874260}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: tileOverlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,3 +97,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aebb6561456dfef4c9f051d771baa0db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  coords: {x: 0, y: 0}
+  tile: {fileID: 0}

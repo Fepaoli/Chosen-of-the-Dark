@@ -21,7 +21,7 @@ public class StateManager : MonoBehaviour
     public GameObject creatures;
 
     public static IState currentState;
-    public StateList stateType;
+    public static StateList stateType;
     private static StateManager SMinstance;
     public static StateManager Instance
     {

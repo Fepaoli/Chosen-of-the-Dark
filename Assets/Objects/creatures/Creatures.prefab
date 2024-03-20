@@ -72,6 +72,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6882702487341603012}
+  - component: {fileID: 6692885289325937883}
   m_Layer: 0
   m_Name: Creatures
   m_TagString: Untagged
@@ -96,6 +97,22 @@ Transform:
   - {fileID: 4928277648061345751}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6692885289325937883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3547827800962866294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a96421c1d8e0b8a4e869eaaac2fac4a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InitiativeOrder: []
+  currentActor: {fileID: 0}
+  actorIndex: 0
+  parent: {fileID: 6882702487341603012}
 --- !u!1 &9190880809651677789
 GameObject:
   m_ObjectHideFlags: 0
@@ -106,9 +123,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5263876071844968713}
   - component: {fileID: 8565999937425368436}
-  - component: {fileID: 6279702581015319191}
   - component: {fileID: 3309539223574192334}
-  m_Layer: 0
+  - component: {fileID: 6868865934473625843}
+  - component: {fileID: 7033080327936874175}
+  m_Layer: 6
   m_Name: Party member
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -182,18 +200,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6279702581015319191
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9190880809651677789}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4db4637d193098247ae76b0e2122ac07, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &3309539223574192334
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -209,3 +215,49 @@ MonoBehaviour:
   mapFunctions: {fileID: 0}
   coords: {x: 0, y: 0}
   speed: 0
+--- !u!114 &6868865934473625843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9190880809651677789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c76b88d9665585349954629adf3c872a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stats: {fileID: 7033080327936874175}
+  pathfinding: {fileID: 3309539223574192334}
+  movementleft: 0
+  actionsleft: 0
+--- !u!114 &7033080327936874175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9190880809651677789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9821c6d1832c38f468b86e41609e5214, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  controlled: 1
+  str: 0
+  agi: 3
+  wit: 0
+  emp: 0
+  traits: 
+  LWSkill: 0
+  MWSkill: 0
+  HWSkill: 0
+  LRWSkill: 0
+  HRWSkill: 0
+  DMSkill: 0
+  OMSkill: 0
+  baseSpeed: 2
+  HP: 0
+  WP: 0
+  baseStam: 0
+  RolledInitiative: 0

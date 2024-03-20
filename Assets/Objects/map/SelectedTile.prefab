@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6589123646547597898}
   - component: {fileID: 1808854060284864519}
   - component: {fileID: -2774252042002921730}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: SelectedTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -98,5 +98,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   examinedTile: {fileID: 0}
-  tilePresent: {fileID: 0}
+  examinedCreature: {fileID: 0}
   sprite: {fileID: 1808854060284864519}
