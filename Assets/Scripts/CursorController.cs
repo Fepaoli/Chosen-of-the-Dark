@@ -23,7 +23,7 @@ public class CursorController : MonoBehaviour
     void Update()
     {
         tilePresent = FindTile().collider;
-        if (tilePresent!=null)
+        if (tilePresent != null)
         {
             examinedTile = tilePresent.gameObject;
             transform.position = examinedTile.transform.position + new Vector3(0, 0.1F, 0);
@@ -40,6 +40,7 @@ public class CursorController : MonoBehaviour
         {
             examinedCreature = creaturePresent.gameObject;
             examinedCoords = creaturePresent.GetComponent<Pathfinder>().coords;
+            examinedTile = CreatureToTile(examinedCreature);
         }
 
         if (StateManager.stateType == StateList.goodTurn)
@@ -63,13 +64,18 @@ public class CursorController : MonoBehaviour
             //Mouse input controller
             if (Input.GetMouseButtonDown(0))
             {
+                Debug.Log("Click");
                 if (isCreatureSelected)
                 {
+                    Debug.Log("Creature was selected");
                     if (creaturePresent == null && tilePresent != null)
                     {
-                        if (examinedCreature.GetComponent<Pathfinder>().IsTileReachable(examinedCoords))
+                        Debug.Log("Tried to move");
+                        Pathfinder creatureMove = examinedCreature.GetComponent<Pathfinder>();
+                        if (creatureMove.IsTileReachable(examinedCoords))
                         {
-                            examinedCreature.GetComponent<Pathfinder>().MoveTo(examinedCoords);
+                            Debug.Log("Tile is reachable");
+                            creatureMove.MoveTo(examinedCoords);
                         }
                         //Check if tile is reachable
                         //If tile is not reachable, do nothing
@@ -78,8 +84,10 @@ public class CursorController : MonoBehaviour
                 }
                 else
                 {
+                    Debug.Log("No creature selected");
                     if (creaturePresent != null)
                     {
+                        Debug.Log("Creature found");
                         if (examinedCreature.GetComponent<StatBlock>().controlled)
                         {
                             selectedCreature = examinedCreature;
@@ -95,6 +103,7 @@ public class CursorController : MonoBehaviour
                 {
                     if (creaturePresent == null)
                     {
+                        Debug.Log("Creature not selected anymore");
                         isCreatureSelected = false;
                     }
                 }
@@ -106,7 +115,7 @@ public class CursorController : MonoBehaviour
     {
         Vector3 cursorPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 cursor2d = new Vector2(cursorPosition.x, cursorPosition.y);
-        RaycastHit2D hit = Physics2D.Raycast(cursor2d, Vector2.zero, Mathf.Infinity, 3);
+        RaycastHit2D hit = Physics2D.Raycast(cursor2d, Vector2.zero, Mathf.Infinity, 1<<3, -Mathf.Infinity, Mathf.Infinity);
         return hit;
     }
 
@@ -114,7 +123,13 @@ public class CursorController : MonoBehaviour
     {
         Vector3 cursorPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 cursor2d = new Vector2(cursorPosition.x, cursorPosition.y);
-        RaycastHit2D hit = Physics2D.Raycast(cursor2d, Vector2.zero, Mathf.Infinity, 6);
+        RaycastHit2D hit = Physics2D.Raycast(cursor2d, Vector2.zero, Mathf.Infinity, 1<<6, -Mathf.Infinity, Mathf.Infinity);
         return hit;
     }
+
+    public GameObject CreatureToTile(GameObject creature){
+        GameObject tile = creature.GetComponent<Pathfinder>().map[examinedCoords].gameObject;
+        return tile;
+    }
+    
 }

@@ -24,9 +24,9 @@ public class MapController : MonoBehaviour
 
     public void Generate()
     {
-        for (int x = 1; x <= 30; x++)
+        for (int x = 0; x <= 30; x++)
         {
-            for (int y = 1; y <= 30; y++)
+            for (int y = 0; y <= 30; y++)
             {
                 //Create and place tile
                 Vector2Int coords = new Vector2Int(x, y);

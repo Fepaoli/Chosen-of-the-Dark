@@ -13,9 +13,10 @@ public class TileController : MonoBehaviour
     public OverlayController overlay;
     public MapController map;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         map = GetComponentInParent<MapController>();
+        TileGen(TerrainType.Normal);
     }
 
     // Update is called once per frame
