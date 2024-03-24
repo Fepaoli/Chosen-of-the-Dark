@@ -13,60 +13,83 @@ public class Pathfinder : MonoBehaviour
     public Dictionary<Vector2Int, TileController> map;
     public Dictionary<Vector2Int, PathfindingGrid> pathfindingMap;
     public Vector2Int coords;
+    private bool moving = false;
+    private List<Vector3> pathCoords;
+    public List<PathfindingGrid> Q;
 
     public float speed;
 
-    public void Start()
+    void Start()
     {
         StateManager.Instance.OnRoundStart.AddListener(CreatePathfindingMap);
         StateManager.Instance.OnBattleStart.AddListener(InitMap);
+        pathCoords = new List<Vector3>();
         gameObject.SetActive(false);
+    }
+    void Update()
+    {
+        if (moving)
+        {
+            if (pathCoords.Any())
+            {
+                if (pathCoords.First() == transform.position)
+                {
+                    coords = mapFunctions.WorldToGrid(transform.position);
+                    pathCoords.RemoveAt(0);
+                }
+                else
+                {
+                    transform.position = Vector3.MoveTowards(transform.position, pathCoords.First(), Time.deltaTime);
+                }
+            }
+            else
+            {
+                moving = false;
+                CreatePathfindingMap();
+                Debug.Log(coords);
+            }
+        }
     }
 
     public void InitMap(){
         gameObject.SetActive(true);
         coords = mapFunctions.WorldToGrid(gameObject.transform.position);
-        speed = 10;
         map = mapFunctions.map;
-        pathfindingMap = new Dictionary<Vector2Int, PathfindingGrid>();
+
+        //placeholder
+        speed = 10;
+        Debug.Log("Initmap finished");
     }
 
-    public void MoveTo(Vector2Int targetCoords)
+    public void MoveTo(Vector2Int target)
     {
-        coords = targetCoords;
-        //Crea lista di coordinate a cui muoverti.
-        List<Vector2Int> moveNodes = new List<Vector2Int>();
-        float distanceMoved =  pathfindingMap[targetCoords].distance;
-        Vector2Int currentNode = targetCoords;
-        while (currentNode != pathfindingMap[currentNode].previous){
-            moveNodes.Add(currentNode);
-            currentNode = pathfindingMap[currentNode].previous;
+        pathCoords.Clear();
+        moving = true;
+        while (pathfindingMap[target].previous != pathfindingMap[target].coords)
+        {
+            Debug.Log(target);
+            pathCoords.Add(mapFunctions.GridToWorld(target));
+            target = pathfindingMap[target].previous;
         }
-        //Scorri lista e sposta il personaggio.
-        moveNodes.Reverse();
-        while (moveNodes.Any()){
-            Vector2Int destination = moveNodes.First();
-            gameObject.transform.position = mapFunctions.GridToWorld(destination);
-            Debug.Log(moveNodes.First());
-            moveNodes.Remove(moveNodes.First());
-        }
-        DefinePaths(coords, speed);
+        pathCoords.Reverse();
+        Debug.Log("Moveto finished");
     }
 
     public bool IsTileReachable(Vector2Int coords)
     {
-        Debug.Log(pathfindingMap[coords].distance);
         return (pathfindingMap[coords].distance <= speed) && (map[coords].walkable);
     }
 
     public void CreatePathfindingMap()
     {
+        pathfindingMap = new Dictionary<Vector2Int, PathfindingGrid>();
         speed = 10;
         map = mapFunctions.map;
         foreach (TileController x in map.Values)
         {
             pathfindingMap.Add(x.coords, new PathfindingGrid(x.coords, 300, x.coords));
         }
+        Debug.Log("create map finished");
         DefinePaths(coords, speed);
     }
     public void DefinePaths(Vector2Int position, float movespeed)
@@ -76,7 +99,7 @@ public class Pathfinder : MonoBehaviour
         pathfindingMap[position] = startingcell;
 
         //Initialize graph nodes
-        List<PathfindingGrid> Q = new List<PathfindingGrid>();
+        Q = new List<PathfindingGrid>();
         foreach (Vector2Int x in pathfindingMap.Keys)
         {
             Q.Add(pathfindingMap[x]);
@@ -88,7 +111,7 @@ public class Pathfinder : MonoBehaviour
             PathfindingGrid u = Q.First();
             Q.Remove(Q.First());
             List<PathfindingGrid> neighbours = FindNeighbours(u.coords);
-            for (int i = 0; i < neighbours.Count; i++)
+            for (int i = 0; i < neighbours.Count(); i++)
             {
                 if (Q.Contains(neighbours[i]))
                 {
@@ -113,6 +136,7 @@ public class Pathfinder : MonoBehaviour
                 }
             }
         }
+        Debug.Log("finish pathfinding finished");
     }
 
     public List<PathfindingGrid> FindNeighbours (Vector2Int position)

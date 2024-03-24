@@ -35,14 +35,12 @@ public class InitiativeController : MonoBehaviour
         // Get enemies
         foreach (Transform child in parent.GetChild(0)){
             InitiativeOrder.Add(child.gameObject);
-            StatBlock init = child.gameObject.GetComponent<StatBlock>();
-            init.RollInitiative();
+            child.gameObject.GetComponent<StatBlock>().RollInitiative();
         }
         // Get party
         foreach (Transform child in parent.GetChild(1)){
             InitiativeOrder.Add(child.gameObject);
-            StatBlock init = child.gameObject.GetComponent<StatBlock>();
-            init.RollInitiative();
+            child.gameObject.GetComponent<StatBlock>().RollInitiative();
         }
 
         // Finalize initiative order

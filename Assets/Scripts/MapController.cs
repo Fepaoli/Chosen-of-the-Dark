@@ -52,11 +52,11 @@ public class MapController : MonoBehaviour
 
     public Vector2Int WorldToGrid(Vector3 coordinates)
     {
-        return new Vector2Int((int)Mathf.Round(coordinates[0] - 0.5F - coordinates[1] * 2), (int)Mathf.Round(coordinates[0] - 0.5F + coordinates[1]*2));
+        return new Vector2Int((int)Mathf.Round(coordinates[0] - coordinates[1] * 2), (int)Mathf.Round(coordinates[0] + coordinates[1]*2));
     }
 
     public Vector3 GridToWorld(Vector2Int coordinates)
     {
-        return new Vector3(coordinates[0] * 0.5F + coordinates[1] * 0.5F - 0.5F, coordinates[0] * -0.25F + coordinates[1] * 0.25F, 0);
+        return new Vector3(coordinates[0] * 0.5F + coordinates[1] * 0.5F, coordinates[0] * -0.25F + coordinates[1] * 0.25F, 0);
     }
 }
