@@ -1,27 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class StateChangeButton : MonoBehaviour
+public class NextTurnBtn : MonoBehaviour
 {
     public UIDocument document;
-    public StateList tiedState;
     public Button btn;
     // Start is called before the first frame update
     void Start()
     {
         btn = new Button { text = "Next turn" };
-        btn.clicked += SwitchState;
+        btn.clicked += GoNext;
 
         document.rootVisualElement.Add(btn);
     }
 
-    void SwitchState()
+    void GoNext()
     {
-        StateManager.Instance.UpdateState(tiedState);
-
+        InitiativeController.Instance.NextInInitiative();
     }
 }

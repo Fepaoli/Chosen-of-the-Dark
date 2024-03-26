@@ -37,10 +37,13 @@ public class StatBlock : MonoBehaviour
     }
 
     public void RollInitiative(){
+        Debug.Log("rolling initiative for " + gameObject);
         RolledInitiative = 0;
-        for (int i = 0; i<agi+2 ; i++){
-            int roll = Random.Range(1,21);
-            if (roll + agi/2 >= 10){
+        for (int i = 0; i<(agi/2+2) ; i++){
+            int roll = Random.Range(1,21) + (agi/2);
+            Debug.Log("Roll number " + i + " = " + roll);
+            if (roll>= 10){
+                Debug.Log("Roll succesful!");
                 RolledInitiative++;
             }
         }

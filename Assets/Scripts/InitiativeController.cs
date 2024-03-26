@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
 public class InitiativeController : MonoBehaviour
 {
@@ -22,6 +23,12 @@ public class InitiativeController : MonoBehaviour
     public GameObject currentActor;
     public int actorIndex;
     public Transform parent;
+
+    private void Awake()
+    {
+        ICinstance = this;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -44,7 +51,7 @@ public class InitiativeController : MonoBehaviour
         }
 
         // Finalize initiative order
-        InitiativeOrder.Sort((s1,s2) => s1.GetComponent<StatBlock>().RolledInitiative.CompareTo(s2.GetComponent<StatBlock>().RolledInitiative));
+        InitiativeOrder.Sort((s1,s2) => s2.GetComponent<StatBlock>().RolledInitiative.CompareTo(s1.GetComponent<StatBlock>().RolledInitiative));
         actorIndex = 0;
     }
 
@@ -55,26 +62,48 @@ public class InitiativeController : MonoBehaviour
             }
         }
         StateManager.Instance.UpdateState(StateList.newround);
+        NextInInitiative();
     }
 
-    void NextInInitiative()
+    public bool IsActing(GameObject creature)
     {
-        currentActor = InitiativeOrder[actorIndex];
-        if (currentActor.GetComponent<StatBlock>().controlled)
+        if (creature == currentActor)
         {
-            StateManager.Instance.UpdateState(StateList.goodTurn);
+            return true;
         }
         else
         {
-            StateManager.Instance.UpdateState(StateList.evilTurn);
-            //currentActor.GetComponent<AutoAction>().TakeTurn();
+            return false;
         }
+    }
 
-        actorIndex ++;
+    public void NextInInitiative()
+    {
         if (actorIndex == InitiativeOrder.Count)
         {
             actorIndex = 0;
             StateManager.Instance.UpdateState(StateList.newround);
         }
+        else
+        {
+            bool auto = false;
+            currentActor = InitiativeOrder[actorIndex];
+            if (currentActor.GetComponent<StatBlock>().controlled)
+            {
+                StateManager.Instance.UpdateState(StateList.goodTurn);
+            }
+            else
+            {
+                StateManager.Instance.UpdateState(StateList.evilTurn);
+                //currentActor.GetComponent<AutoAction>().TakeTurn();
+                auto = true;
+            }
+            actorIndex++;
+            if (auto)
+            {
+                NextInInitiative();
+            }
+        }
+        
     }
 }

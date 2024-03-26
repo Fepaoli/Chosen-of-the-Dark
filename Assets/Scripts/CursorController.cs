@@ -22,6 +22,7 @@ public class CursorController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Find if looking at tile or creature
         tilePresent = FindTile().collider;
         if (tilePresent != null)
         {
@@ -61,6 +62,8 @@ public class CursorController : MonoBehaviour
                     //show enemy characteristics in UI
                 }
             }
+
+
             //Mouse input controller
             if (Input.GetMouseButtonDown(0))
             {
@@ -71,7 +74,7 @@ public class CursorController : MonoBehaviour
                     if (creaturePresent == null && tilePresent != null)
                     {
                         Debug.Log("Tried to move");
-                        Pathfinder creatureMove = examinedCreature.GetComponent<Pathfinder>();
+                        Pathfinder creatureMove = selectedCreature.GetComponent<Pathfinder>();
                         if (creatureMove.IsTileReachable(examinedCoords))
                         {
                             Debug.Log("Tile is reachable");
@@ -88,8 +91,9 @@ public class CursorController : MonoBehaviour
                     if (creaturePresent != null)
                     {
                         Debug.Log("Creature found");
-                        if (examinedCreature.GetComponent<StatBlock>().controlled)
+                        if (examinedCreature.GetComponent<StatBlock>().controlled && InitiativeController.Instance.IsActing(examinedCreature))
                         {
+                            Debug.Log(InitiativeController.Instance.IsActing(examinedCreature));
                             selectedCreature = examinedCreature;
                             isCreatureSelected = true;
                         }
@@ -105,6 +109,7 @@ public class CursorController : MonoBehaviour
                     {
                         Debug.Log("Creature not selected anymore");
                         isCreatureSelected = false;
+                        selectedCreature = null;
                     }
                 }
             }
