@@ -45,54 +45,36 @@ public class InitiativeController : MonoBehaviour
 
         // Finalize initiative order
         InitiativeOrder.Sort((s1,s2) => s1.GetComponent<StatBlock>().RolledInitiative.CompareTo(s2.GetComponent<StatBlock>().RolledInitiative));
+        actorIndex = 0;
     }
 
     void RefreshAction(){
         foreach (GameObject creature in InitiativeOrder){
             if (creature.GetComponent<StatBlock>().controlled){
-                StateManager.Instance.UpdateState(StateList.goodTurn);
-                creature.GetComponent<PlayerAction>().enabled = true;
                 creature.GetComponent<PlayerAction>().TurnReset();
-            }
-            else{
-                StateManager.Instance.UpdateState(StateList.evilTurn);
             }
         }
         StateManager.Instance.UpdateState(StateList.newround);
-        NextInInitiative();
     }
 
     void NextInInitiative()
     {
-        if (actorIndex >= InitiativeOrder.Count)
+        currentActor = InitiativeOrder[actorIndex];
+        if (currentActor.GetComponent<StatBlock>().controlled)
         {
-            StateManager.Instance.UpdateState(StateList.newround);
+            StateManager.Instance.UpdateState(StateList.goodTurn);
         }
         else
         {
-            currentActor = InitiativeOrder[actorIndex];
-            if (currentActor.GetComponent<StatBlock>().controlled)
-            {
-                StateManager.Instance.UpdateState(StateList.goodTurn);
-            }
-            else
-            {
-                StateManager.Instance.UpdateState(StateList.evilTurn);
-                //currentActor.GetComponent<AutoAction>().TakeTurn();
-            }
-            actorIndex++;
+            StateManager.Instance.UpdateState(StateList.evilTurn);
+            //currentActor.GetComponent<AutoAction>().TakeTurn();
         }
-        
 
-
-        
+        actorIndex ++;
         if (actorIndex == InitiativeOrder.Count)
         {
             actorIndex = 0;
-        }
-        else
-        {
-            actorIndex += 1;
+            StateManager.Instance.UpdateState(StateList.newround);
         }
     }
 }
