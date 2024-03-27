@@ -9,7 +9,6 @@ public class MenuUIManager : MonoBehaviour
     {
         StateManager.Instance.OnMenuReturn.AddListener(Appear);
         StateManager.Instance.OnMenuExit.AddListener(Disappear);
-        Disappear();
     }
 
     // Update is called once per frame
