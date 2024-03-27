@@ -16,7 +16,9 @@ public class PlayerAction : MonoBehaviour
     }
 
     public void TurnReset(){
+        Debug.Log("TurnReset called for" + gameObject);
         actionsleft = 1;
-        movementleft = stats.baseSpeed + stats.agi;
+        pathfinding.moveLeft = pathfinding.speed;
+        pathfinding.CreatePathfindingMap();
     }
 }

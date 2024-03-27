@@ -75,8 +75,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 3625043607559282579, guid: 19fb86013d8c24d6cb8410c0aadf30fa, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 472150e730df87a40a7d88cf5c237c94, type: 3}
+  m_Color: {r: 0.47160795, g: 0.6855345, b: 0.27378258, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -103,6 +103,9 @@ MonoBehaviour:
   cover: 0
   walkable: 0
   sightBlock: 0
+  coords: {x: 0, y: 0}
+  overlay: {fileID: 0}
+  map: {fileID: 0}
 --- !u!60 &2699370805429432468
 PolygonCollider2D:
   m_ObjectHideFlags: 0

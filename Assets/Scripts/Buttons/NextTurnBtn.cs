@@ -2,23 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 public class NextTurnBtn : MonoBehaviour
 {
-    public UIDocument document;
     public Button btn;
     // Start is called before the first frame update
     void Start()
     {
-        btn = new Button { text = "Next turn" };
-        btn.clicked += GoNext;
-
-        document.rootVisualElement.Add(btn);
+        btn = gameObject.GetComponent<Button>();
+        btn.onClick.AddListener(GoNext);
     }
 
     void GoNext()
     {
-        InitiativeController.Instance.NextInInitiative();
+        if (!CursorController.Instance.acting)
+            InitiativeController.Instance.NextInInitiative();
     }
 }

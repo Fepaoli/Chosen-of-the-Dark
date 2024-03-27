@@ -2,21 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Linq;
 using Unity.VisualScripting;
+using UnityEditor.UIElements;
 using UnityEngine;
-using UnityEngine.UIElements;
+using TMPro;
+using UnityEngine.UI;
 
 public class StateChangeButton : MonoBehaviour
 {
-    public UIDocument document;
     public StateList tiedState;
     public Button btn;
     // Start is called before the first frame update
     void Start()
     {
-        btn = new Button { text = "Next turn" };
-        btn.clicked += SwitchState;
-
-        document.rootVisualElement.Add(btn);
+        btn = gameObject.GetComponent<Button>();
+        btn.onClick.AddListener(SwitchState);
     }
 
     void SwitchState()

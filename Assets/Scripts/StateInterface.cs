@@ -5,6 +5,6 @@ using UnityEngine;
 public interface IState
 {
     void EnterState();
-    void SwitchState(IState switchTo);
+    void ExitState();
     StateList GetType();
 }

@@ -8,6 +8,7 @@ using UnityEngine.XR;
 public class StateManager : MonoBehaviour
 {
     public UnityEvent OnMenuReturn;
+    public UnityEvent OnMenuExit;
     public UnityEvent OnBattleStart;
     public UnityEvent OnRoundStart;
     public UnityEvent OnTurnStart;
@@ -47,6 +48,7 @@ public class StateManager : MonoBehaviour
 
     void Update(){
         if (stateType != currentState.GetType()){
+            currentState.ExitState();
             switch(stateType){
                 case StateList.menu:
                     currentState = new MainMenu();
@@ -94,8 +96,8 @@ public class MainMenu : IState
     void IState.EnterState(){
         StateManager.Instance.OnMenuReturn.Invoke();
     }
-    void IState.SwitchState(IState switchTo){
-
+    void IState.ExitState(){
+        StateManager.Instance.OnMenuExit.Invoke();
     }
     StateList IState.GetType(){
         return stateType;
@@ -109,7 +111,7 @@ public class RoundStart : IState
         StateManager.Instance.creatures.SetActive(true);
         StateManager.Instance.OnRoundStart.Invoke();
     }
-    void IState.SwitchState(IState switchTo){
+    void IState.ExitState(){
 
     }
     StateList IState.GetType(){
@@ -123,7 +125,7 @@ public class Playstart : IState
         StateManager.Instance.map.SetActive(true);
         StateManager.Instance.OnBattleStart.Invoke();
     }
-    void IState.SwitchState(IState switchTo){
+    void IState.ExitState(){
 
     }
     StateList IState.GetType(){
@@ -137,7 +139,7 @@ public class Playend : IState
     void IState.EnterState(){
         StateManager.Instance.OnBattleEnd.Invoke();
     }
-    void IState.SwitchState(IState switchTo){
+    void IState.ExitState(){
 
     }
     StateList IState.GetType(){
@@ -151,7 +153,7 @@ public class PlayerTurn : IState
     void IState.EnterState(){
         StateManager.Instance.OnTurnStart.Invoke();
     }
-    void IState.SwitchState(IState switchTo){
+    void IState.ExitState(){
 
     }
 
@@ -168,7 +170,7 @@ public class EnemyTurn : IState
     void IState.EnterState(){
         StateManager.Instance.OnEnemyTurnStart.Invoke();
     }
-    void IState.SwitchState(IState switchTo){
+    void IState.ExitState(){
 
     }
     StateList IState.GetType(){

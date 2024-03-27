@@ -1,22 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.Search;
 using UnityEngine;
 
 public class CursorController : MonoBehaviour
 {
+    private static CursorController CCInstance;
+    public static CursorController Instance
+    {
+        get
+        {
+            if (CCInstance == null)
+            {
+                Debug.Log("No cursor?");
+            }
+            return CCInstance;
+        }
+    }
     public GameObject examinedTile;
     public GameObject examinedCreature;
+    public GameObject map;
     private Collider2D tilePresent;
     private Collider2D creaturePresent;
     public SpriteRenderer sprite;
     public Vector2Int examinedCoords;
     private bool isCreatureSelected;
     public GameObject selectedCreature;
-    // Start is called before the first frame update
-    void Start()
+    public bool acting;
+    void Awake()
     {
-        
+        CCInstance = this;
     }
 
     // Update is called once per frame
@@ -71,13 +85,14 @@ public class CursorController : MonoBehaviour
                 if (isCreatureSelected)
                 {
                     Debug.Log("Creature was selected");
-                    if (creaturePresent == null && tilePresent != null)
+                    if (creaturePresent == null && tilePresent != null && !acting)
                     {
                         Debug.Log("Tried to move");
                         Pathfinder creatureMove = selectedCreature.GetComponent<Pathfinder>();
                         if (creatureMove.IsTileReachable(examinedCoords))
                         {
                             Debug.Log("Tile is reachable");
+                            acting = true;
                             creatureMove.MoveTo(examinedCoords);
                         }
                         //Check if tile is reachable
@@ -96,6 +111,7 @@ public class CursorController : MonoBehaviour
                             Debug.Log(InitiativeController.Instance.IsActing(examinedCreature));
                             selectedCreature = examinedCreature;
                             isCreatureSelected = true;
+                            UpdateOverlays();
                         }
                     }
                 }
@@ -107,12 +123,20 @@ public class CursorController : MonoBehaviour
                 {
                     if (creaturePresent == null)
                     {
-                        Debug.Log("Creature not selected anymore");
-                        isCreatureSelected = false;
-                        selectedCreature = null;
+                        Deselect();
                     }
                 }
             }
+        }
+    }
+
+    public void Deselect(){
+        HideOverlays();
+        Debug.Log("Creature not selected anymore");
+        isCreatureSelected = false;
+        if (selectedCreature != null){
+            selectedCreature.GetComponent<Pathfinder>().Deselect();
+            selectedCreature = null;
         }
     }
 
@@ -137,4 +161,15 @@ public class CursorController : MonoBehaviour
         return tile;
     }
     
+    public void UpdateOverlays(){
+        foreach (Transform child in map.transform){
+            child.GetChild(0).GetComponent<OverlayController>().ShowState();
+        }
+    }
+
+    public void HideOverlays(){
+        foreach (Transform child in map.transform){
+            child.GetChild(0).GetComponent<OverlayController>().Hide();
+        }
+    }
 }

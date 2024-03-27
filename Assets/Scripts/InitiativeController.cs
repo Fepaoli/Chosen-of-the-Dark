@@ -56,11 +56,6 @@ public class InitiativeController : MonoBehaviour
     }
 
     void RefreshAction(){
-        foreach (GameObject creature in InitiativeOrder){
-            if (creature.GetComponent<StatBlock>().controlled){
-                creature.GetComponent<PlayerAction>().TurnReset();
-            }
-        }
         StateManager.Instance.UpdateState(StateList.newround);
         NextInInitiative();
     }
@@ -79,31 +74,29 @@ public class InitiativeController : MonoBehaviour
 
     public void NextInInitiative()
     {
+        CursorController.Instance.Deselect();
         if (actorIndex == InitiativeOrder.Count)
         {
             actorIndex = 0;
             StateManager.Instance.UpdateState(StateList.newround);
         }
+        bool auto = false;
+        currentActor = InitiativeOrder[actorIndex];
+        if (currentActor.GetComponent<StatBlock>().controlled)
+        {
+            StateManager.Instance.UpdateState(StateList.goodTurn);
+            currentActor.GetComponent<PlayerAction>().TurnReset();
+        }
         else
         {
-            bool auto = false;
-            currentActor = InitiativeOrder[actorIndex];
-            if (currentActor.GetComponent<StatBlock>().controlled)
-            {
-                StateManager.Instance.UpdateState(StateList.goodTurn);
-            }
-            else
-            {
-                StateManager.Instance.UpdateState(StateList.evilTurn);
-                //currentActor.GetComponent<AutoAction>().TakeTurn();
-                auto = true;
-            }
-            actorIndex++;
-            if (auto)
-            {
-                NextInInitiative();
-            }
+            StateManager.Instance.UpdateState(StateList.evilTurn);
+            //currentActor.GetComponent<AutoAction>().TakeTurn();
+            auto = true;
         }
-        
+        actorIndex++;
+        if (auto)
+        {
+            NextInInitiative();
+        }
     }
 }
