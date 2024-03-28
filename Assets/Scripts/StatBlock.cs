@@ -24,14 +24,18 @@ public class StatBlock : MonoBehaviour
     public int HP;
     public int currentHP;
     public int WP;
+    public int currentWP;
     public int baseStam;
     public int stamina;
+    public int staminaLeft;
     public int RolledInitiative;
     // Start is called before the first frame update
     void Start()
     {
         SecondaryCalcs();
         currentHP = HP;
+        currentWP = WP;
+        staminaLeft = stamina;
     }
 
     // Update is called once per frame

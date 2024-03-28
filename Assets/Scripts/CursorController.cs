@@ -49,10 +49,13 @@ public class CursorController : MonoBehaviour
             transform.position = examinedTile.transform.position + new Vector3(0, 0.1F, 0);
             sprite.color = Color.red;
             examinedCoords = tilePresent.GetComponent<TileController>().coords;
+            BattleUIManager.Instance.InspectTerrain(examinedTile);
+            BattleUIManager.Instance.UpdateTerrainInspector(true);
         }
         else
         {
             sprite.color = Color.clear;
+            BattleUIManager.Instance.UpdateTerrainInspector(false);
         }
 
         creaturePresent = FindCreature().collider;

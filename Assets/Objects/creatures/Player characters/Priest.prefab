@@ -120,6 +120,8 @@ MonoBehaviour:
   pathfinding: {fileID: 8993381676729650587}
   movementleft: 0
   actionsleft: 0
+  lookingForTarget: 0
+  currentTarget: {fileID: 0}
 --- !u!114 &5288937087994170976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,8 +149,10 @@ MonoBehaviour:
   OMSkill: 0
   baseSpeed: 2
   HP: 0
+  currentHP: 0
   WP: 0
   baseStam: 0
+  stamina: 0
   RolledInitiative: 0
 --- !u!70 &6852956859818665824
 CapsuleCollider2D:
