@@ -22,6 +22,7 @@ public class StatBlock : MonoBehaviour
     public int OMSkill;
     public int baseSpeed;
     public int HP;
+    public int currentHP;
     public int WP;
     public int baseStam;
     public int stamina;
@@ -29,7 +30,8 @@ public class StatBlock : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        SecondaryCalcs();
+        currentHP = HP;
     }
 
     // Update is called once per frame

@@ -85,7 +85,7 @@ public class InitiativeController : MonoBehaviour
         else
         {
             StateManager.Instance.UpdateState(StateList.evilTurn);
-            //currentActor.GetComponent<AutoAction>().TakeTurn();
+            currentActor.GetComponent<AutoAction>().TakeTurn();
             auto = true;
         }
         actorIndex++;

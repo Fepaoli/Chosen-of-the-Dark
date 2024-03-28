@@ -27,6 +27,10 @@ public class CursorController : MonoBehaviour
     public Vector2Int examinedCoords;
     private bool isCreatureSelected;
     public GameObject selectedCreature;
+    public bool targeting;
+    public bool targetAllies;
+    public GameObject targeter;
+    public float targetingRange;
     public bool acting;
     public bool isOnUI = false;
     void Awake()
@@ -82,51 +86,67 @@ public class CursorController : MonoBehaviour
 
             //Mouse input controller
             if (!isOnUI){
-                if (Input.GetMouseButtonDown(0))
-                {
-                    Debug.Log("Click");
-                    if (isCreatureSelected)
-                    {
-                        Debug.Log("Creature was selected");
-                        if (creaturePresent == null && tilePresent != null && !acting)
+                if (targeting){
+                    if (Input.GetMouseButtonDown(0)){
+                        if (creaturePresent != null && examinedCreature.GetComponent<StatBlock>().controlled == targetAllies)
                         {
-                            Debug.Log("Tried to move");
-                            Pathfinder creatureMove = selectedCreature.GetComponent<Pathfinder>();
-                            if (creatureMove.IsTileReachable(examinedCoords))
-                            {
-                                Debug.Log("Tile is reachable");
-                                acting = true;
-                                creatureMove.MoveTo(examinedCoords);
-                            }
-                            //Check if tile is reachable
-                            //If tile is not reachable, do nothing
-                            //If tile is reachable, call "move" function
+                            selectedCreature.GetComponent<PlayerAction>().currentTarget = examinedCreature;
+                            targeting = false;
                         }
                     }
                     else
+                        if (Input.GetMouseButtonDown(1)){
+                            targeting = false;
+                            selectedCreature.GetComponent<PlayerAction>().lookingForTarget = false;
+                        }
+                }
+                else{
+                    if (Input.GetMouseButtonDown(0))
                     {
-                        Debug.Log("No creature selected");
-                        if (creaturePresent != null)
+                        Debug.Log("Click");
+                        if (isCreatureSelected)
                         {
-                            Debug.Log("Creature found");
-                            if (examinedCreature.GetComponent<StatBlock>().controlled && InitiativeController.Instance.IsActing(examinedCreature))
+                            Debug.Log("Creature was selected");
+                            if (creaturePresent == null && tilePresent != null && !acting)
                             {
-                                Debug.Log(InitiativeController.Instance.IsActing(examinedCreature));
-                                selectedCreature = examinedCreature;
-                                isCreatureSelected = true;
-                                UpdateOverlays();
+                                Debug.Log("Tried to move");
+                                Pathfinder creatureMove = selectedCreature.GetComponent<Pathfinder>();
+                                if (creatureMove.IsTileReachable(examinedCoords))
+                                {
+                                    Debug.Log("Tile is reachable");
+                                    acting = true;
+                                    creatureMove.MoveTo(examinedCoords);
+                                }
+                                //Check if tile is reachable
+                                //If tile is not reachable, do nothing
+                                //If tile is reachable, call "move" function
+                            }
+                        }
+                        else
+                        {
+                            Debug.Log("No creature selected");
+                            if (creaturePresent != null)
+                            {
+                                Debug.Log("Creature found");
+                                if (examinedCreature.GetComponent<StatBlock>().controlled && InitiativeController.Instance.IsActing(examinedCreature))
+                                {
+                                    Debug.Log(InitiativeController.Instance.IsActing(examinedCreature));
+                                    selectedCreature = examinedCreature;
+                                    isCreatureSelected = true;
+                                    UpdateOverlays();
+                                }
                             }
                         }
                     }
-                }
-                if (Input.GetMouseButtonDown(1))
-                {
-                    //show stats in depth
-                    if (isCreatureSelected)
+                    if (Input.GetMouseButtonDown(1))
                     {
-                        if (creaturePresent == null)
+                        //show stats in depth
+                        if (isCreatureSelected)
                         {
-                            Deselect();
+                            if (creaturePresent == null)
+                            {
+                                Deselect();
+                            }
                         }
                     }
                 }

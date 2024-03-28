@@ -5,6 +5,6 @@ using UnityEngine;
 public class AutoAction : MonoBehaviour
 {
     public void TakeTurn(){
-        InitiativeController.Instance.NextInInitiative();
+        Debug.Log("Enemy should have acted but AI doesn't exist yet");
     }
 }
