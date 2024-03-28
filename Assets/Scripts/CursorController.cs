@@ -57,6 +57,8 @@ public class CursorController : MonoBehaviour
             examinedCreature = creaturePresent.gameObject;
             examinedCoords = creaturePresent.GetComponent<Pathfinder>().coords;
             examinedTile = CreatureToTile(examinedCreature);
+            transform.position = examinedTile.transform.position + new Vector3(0, 0.1F, 0);
+            sprite.color = Color.blue;
         }
 
         if (StateManager.stateType == StateList.goodTurn)
@@ -159,7 +161,6 @@ public class CursorController : MonoBehaviour
     }
 
     public GameObject CreatureToTile(GameObject creature){
-        Debug.Log("a" + creature.GetComponent<Pathfinder>());
         GameObject tile = creature.GetComponent<Pathfinder>().map[examinedCoords].gameObject;
         return tile;
     }
