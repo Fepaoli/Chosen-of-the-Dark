@@ -23,6 +23,7 @@ public class Pathfinder : MonoBehaviour
     void Start()
     {
         StateManager.Instance.OnBattleStart.AddListener(InitMap);
+        StateManager.Instance.OnRoundStart.AddListener(CreatePathfindingMap);
         pathCoords = new List<Vector3>();
         gameObject.SetActive(false);
     }
@@ -48,6 +49,7 @@ public class Pathfinder : MonoBehaviour
                 moving = false;
                 CursorController.Instance.acting = false;
                 CreatePathfindingMap();
+                DefinePaths(coords, moveLeft);
                 UpdateMoveMap();
             }
         }
@@ -91,7 +93,6 @@ public class Pathfinder : MonoBehaviour
             pathfindingMap.Add(x.coords, new PathfindingGrid(x.coords, 300, x.coords));
         }
         Debug.Log("create map finished");
-        DefinePaths(coords, moveLeft);
     }
     public void DefinePaths(Vector2Int position, float movespeed)
     {

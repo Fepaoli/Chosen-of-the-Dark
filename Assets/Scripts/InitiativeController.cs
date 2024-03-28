@@ -35,7 +35,7 @@ public class InitiativeController : MonoBehaviour
         parent = gameObject.transform;
         actorIndex = 0;
         StateManager.Instance.OnBattleStart.AddListener(RollInitiative);
-        StateManager.Instance.OnRoundStart.AddListener(RefreshAction);
+        StateManager.Instance.OnRoundStart.AddListener(NextInInitiative);
     }
 
     void RollInitiative(){
@@ -53,11 +53,6 @@ public class InitiativeController : MonoBehaviour
         // Finalize initiative order
         InitiativeOrder.Sort((s1,s2) => s2.GetComponent<StatBlock>().RolledInitiative.CompareTo(s1.GetComponent<StatBlock>().RolledInitiative));
         actorIndex = 0;
-    }
-
-    void RefreshAction(){
-        StateManager.Instance.UpdateState(StateList.newround);
-        NextInInitiative();
     }
 
     public bool IsActing(GameObject creature)

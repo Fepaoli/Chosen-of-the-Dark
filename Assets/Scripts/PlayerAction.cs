@@ -20,5 +20,6 @@ public class PlayerAction : MonoBehaviour
         actionsleft = 1;
         pathfinding.moveLeft = pathfinding.speed;
         pathfinding.CreatePathfindingMap();
+        pathfinding.DefinePaths(pathfinding.coords, pathfinding.moveLeft);
     }
 }
