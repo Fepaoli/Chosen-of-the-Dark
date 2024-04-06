@@ -12,6 +12,7 @@ public class StatBlock : MonoBehaviour
     public int wit;
     public int emp;
     public List<Traits> traits;
+    public List<IAction> actions;
 
     public int LWSkill;
     public int MWSkill;
@@ -61,5 +62,15 @@ public class StatBlock : MonoBehaviour
         HP = 10 + 2*str;
         WP = 5 + 2*wit + 2*emp;
         stamina = baseStam + (int)Math.Truncate(str/4D) + (int)Math.Truncate(agi/4D);
+    }
+
+    public void AddAction(IAction newAction)
+    {
+        actions.Add(newAction);
+    }
+
+    public void RemoveAction(IAction newAction)
+    {
+        actions.Remove(newAction);
     }
 }

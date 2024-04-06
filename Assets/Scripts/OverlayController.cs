@@ -47,7 +47,6 @@ public class OverlayController : MonoBehaviour
 
     public void Hide(){
         colorRenderer.color = Color.clear;
-        state = TileState.NotReachable;
     }
 
     public enum TileState {
