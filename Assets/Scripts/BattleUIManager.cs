@@ -23,6 +23,8 @@ public class BattleUIManager : MonoBehaviour
     public GameObject creatureInspector;
     public GameObject creatureName;
     public GameObject creatureStats;
+    public GameObject terrainName;
+    public GameObject terrainStats;
     public GameObject terrainInspector;
     public ActionController buttons;
     // Start is called before the first frame update
@@ -77,7 +79,7 @@ public class BattleUIManager : MonoBehaviour
     }
 
     public void InspectTerrain(GameObject terrain){
-
+        //terrainName.GetComponent<TMP_Text>().SetText(terrain.name);
     }
 
     public void UpdateCreatureInspector(bool show){

@@ -18,6 +18,7 @@ public class CursorController : MonoBehaviour
             return CCInstance;
         }
     }
+    public IAction currentAction;
     public GameObject examinedTile;
     public GameObject examinedCreature;
     public GameObject map;

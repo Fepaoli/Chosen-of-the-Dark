@@ -95,3 +95,30 @@ public class InitiativeController : MonoBehaviour
         }
     }
 }
+
+public class Attack : IAction{
+    GameObject attackTarget;
+    StatBlock targetStats;
+    GameObject boundCreature;
+    StatBlock boundStats;
+    public void StartTargeting(){
+        CursorController.Instance.targeting = true;
+        CursorController.Instance.currentAction = this;
+    }
+    public void GetTarget(GameObject target){
+        attackTarget = target;
+        targetStats = target.GetComponent<StatBlock>();
+        Execute();
+    }
+    public void Execute(){
+        int damage = RollManager.Instance.RollContested(boundStats.HWSkill,boundStats.agi,targetStats.HWSkill,targetStats.agi);
+        //Call damage function on target
+        CursorController.Instance.targeting = false;
+        CursorController.Instance.currentAction = null;
+    }
+
+    public void BindActor (GameObject actor){
+        boundCreature = actor;
+        boundStats = boundCreature.GetComponent<StatBlock>();
+    }
+}
