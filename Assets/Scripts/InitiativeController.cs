@@ -112,7 +112,7 @@ public class Attack : IAction{
     }
     public void Execute(){
         int damage = RollManager.Instance.RollContested(boundStats.HWSkill,boundStats.agi,targetStats.HWSkill,targetStats.agi);
-        //Call damage function on target
+        //Call damage function on targetstats
         CursorController.Instance.targeting = false;
         CursorController.Instance.currentAction = null;
     }
