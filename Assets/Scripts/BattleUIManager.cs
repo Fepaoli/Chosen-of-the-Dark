@@ -26,7 +26,7 @@ public class BattleUIManager : MonoBehaviour
     public GameObject terrainName;
     public GameObject terrainStats;
     public GameObject terrainInspector;
-    public ActionController buttons;
+    // public ActionController buttons;
     // Start is called before the first frame update
     void Start()
     {
@@ -52,7 +52,6 @@ public class BattleUIManager : MonoBehaviour
         creatureStats.SetActive(false);
         creatureName.SetActive(false);
         creatureInspector.SetActive(false);
-        buttons.hideActions();
     }
 
     public void InspectCreature(GameObject creature){
@@ -71,11 +70,6 @@ public class BattleUIManager : MonoBehaviour
                 stamina += "|";
         }
         creatureStats.GetComponent<TMP_Text>().SetText("Str: " + stats.str + " Agi: " + stats.agi + " Wit: " + stats.wit + " Emp: " + stats.emp + "\nHP = " + stats.currentHP + "/" + stats.HP + " WP = " + stats.currentWP + "/" + stats.WP + " Stamina = " + stamina);
-        if (stats.controlled)
-        {
-            buttons = creatureInspector.GetComponent<ActionController>();
-            buttons.showActions(creature);
-        }
     }
 
     public void InspectTerrain(GameObject terrain){
