@@ -60,6 +60,7 @@ public class StatBlock : MonoBehaviour
     public void AddAction(TAction newAction)
     {
         actions.Add(newAction);
+        Debug.Log(actions);
     }
 
     public void RemoveAction(TAction newAction)

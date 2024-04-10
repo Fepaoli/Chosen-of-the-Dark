@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class ActionController : MonoBehaviour
 {
-    PlayerAction selectedCharacter;
+    StatBlock selectedCharacter;
     public GameObject buttonTemplate;
     public void ShowActions(GameObject creature)
     {
-        selectedCharacter = creature.GetComponent<PlayerAction>();
+        selectedCharacter = creature.GetComponent<StatBlock>();
         Debug.Log(selectedCharacter.actions);
         foreach (TAction action in selectedCharacter.actions){
             GameObject newButton = Instantiate(buttonTemplate, gameObject.transform);

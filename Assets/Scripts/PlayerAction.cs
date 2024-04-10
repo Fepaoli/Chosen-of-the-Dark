@@ -11,8 +11,6 @@ public class PlayerAction : MonoBehaviour
     public int actionsleft;
     public bool lookingForTarget = false;
     public GameObject currentTarget;
-
-    public List<TAction> actions;
     // Update is called once per frame
     void Update()
     {
@@ -33,13 +31,5 @@ public class PlayerAction : MonoBehaviour
         CursorController.Instance.targetAllies = ally;
         CursorController.Instance.targetingRange = range;
         lookingForTarget = true;
-    }
-
-    public void AddActions (TAction newaction){
-        actions.Add(newaction);
-    }
-
-    public void RemoveActions (TAction newaction){
-        actions.Remove(newaction);
     }
 }

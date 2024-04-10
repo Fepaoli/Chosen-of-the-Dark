@@ -10,7 +10,7 @@ public class ActionBtn : MonoBehaviour
     public GameObject actor;
     public TAction linkedAction;
     public bool pressed = false;
-    void Start()
+    void Awake()
     {
         btn = gameObject.GetComponent<Button>();
     }
@@ -19,7 +19,7 @@ public class ActionBtn : MonoBehaviour
         btn.onClick.AddListener(SelectButton);
     }
 
-    void SelectButton(){
+    public void SelectButton(){
         if (pressed){
             linkedAction.StopTargeting();
             pressed = false;

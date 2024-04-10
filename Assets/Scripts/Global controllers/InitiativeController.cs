@@ -114,7 +114,6 @@ public class InitiativeController : MonoBehaviour
             child.gameObject.SetActive(true);
             InitiativeOrder.Add(child.gameObject);
             child.gameObject.GetComponent<StatBlock>().RollInitiative();
-            child.gameObject.GetComponent<StatBlock>().AddAction(baseAttack);
         }
     }
 }
