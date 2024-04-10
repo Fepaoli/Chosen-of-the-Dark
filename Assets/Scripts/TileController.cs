@@ -19,12 +19,6 @@ public class TileController : MonoBehaviour
         TileGen(TerrainType.Normal);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void Setcoords(Vector2Int givenCoords)
     {
         coords = givenCoords;

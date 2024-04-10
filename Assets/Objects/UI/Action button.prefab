@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2887297297947574890}
   - component: {fileID: 62773761661731093}
   - component: {fileID: 8126898715641813043}
-  - component: {fileID: 6139001574369512032}
+  - component: {fileID: 3564776255073403206}
   m_Layer: 5
   m_Name: Action button
   m_TagString: Untagged
@@ -122,7 +122,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &6139001574369512032
+--- !u!114 &3564776255073403206
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -131,9 +131,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 842143989392970482}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d04beaa8c3c8334e8ca77cd110d7958, type: 3}
+  m_Script: {fileID: 11500000, guid: 81b71d950f611f041a62ffd1b00c2448, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  btn: {fileID: 0}
+  actor: {fileID: 0}
+  pressed: 0
 --- !u!1 &2876748502407440068
 GameObject:
   m_ObjectHideFlags: 0

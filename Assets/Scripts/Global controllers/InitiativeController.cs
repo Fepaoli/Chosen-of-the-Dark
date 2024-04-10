@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 
@@ -23,6 +24,8 @@ public class InitiativeController : MonoBehaviour
     public GameObject currentActor;
     public int actorIndex;
     public Transform parent;
+    //Action test
+    public TAction baseAttack;
 
     private void Awake()
     {
@@ -32,6 +35,7 @@ public class InitiativeController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        baseAttack = new Attack(1.5F);
         parent = gameObject.transform;
         actorIndex = 0;
         StateManager.Instance.OnBattleStart.AddListener(RollInitiative);
@@ -41,13 +45,16 @@ public class InitiativeController : MonoBehaviour
     void RollInitiative(){
         // Get enemies
         foreach (Transform child in parent.GetChild(0)){
+            child.gameObject.SetActive(true);
             InitiativeOrder.Add(child.gameObject);
             child.gameObject.GetComponent<StatBlock>().RollInitiative();
         }
         // Get party
         foreach (Transform child in parent.GetChild(1)){
+            child.gameObject.SetActive(true);
             InitiativeOrder.Add(child.gameObject);
             child.gameObject.GetComponent<StatBlock>().RollInitiative();
+            child.gameObject.GetComponent<StatBlock>().AddAction(baseAttack);
         }
 
         // Finalize initiative order
@@ -94,31 +101,30 @@ public class InitiativeController : MonoBehaviour
             NextInInitiative();
         }
     }
+
+    public void SetupPathfinding(){
+        // Get enemies
+        foreach (Transform child in parent.GetChild(0)){
+            child.gameObject.SetActive(true);
+            InitiativeOrder.Add(child.gameObject);
+            child.gameObject.GetComponent<StatBlock>().RollInitiative();
+        }
+        // Get party
+        foreach (Transform child in parent.GetChild(1)){
+            child.gameObject.SetActive(true);
+            InitiativeOrder.Add(child.gameObject);
+            child.gameObject.GetComponent<StatBlock>().RollInitiative();
+            child.gameObject.GetComponent<StatBlock>().AddAction(baseAttack);
+        }
+    }
 }
 
-public class Attack : IAction{
-    GameObject attackTarget;
-    StatBlock targetStats;
-    GameObject boundCreature;
-    StatBlock boundStats;
-    public void StartTargeting(){
-        CursorController.Instance.targeting = true;
-        CursorController.Instance.currentAction = this;
-    }
-    public void GetTarget(GameObject target){
-        attackTarget = target;
-        targetStats = target.GetComponent<StatBlock>();
-        Execute();
-    }
-    public void Execute(){
+public class Attack : TAction{
+    public Attack(float attRange) : base(attRange){}
+    public new void Execute(){
         int damage = RollManager.Instance.RollContested(boundStats.HWSkill,boundStats.agi,targetStats.HWSkill,targetStats.agi);
-        //Call damage function on targetstats
+        targetStats.TakeDamage(damage);
         CursorController.Instance.targeting = false;
         CursorController.Instance.currentAction = null;
-    }
-
-    public void BindActor (GameObject actor){
-        boundCreature = actor;
-        boundStats = boundCreature.GetComponent<StatBlock>();
     }
 }

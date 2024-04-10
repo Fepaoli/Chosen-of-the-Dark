@@ -12,7 +12,7 @@ public class StatBlock : MonoBehaviour
     public int wit;
     public int emp;
     public List<Traits> traits;
-    public List<IAction> actions;
+    public List<TAction> actions;
 
     public int LWSkill;
     public int MWSkill;
@@ -33,6 +33,7 @@ public class StatBlock : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        actions = new List<TAction>();
         SecondaryCalcs();
         currentHP = HP;
         currentWP = WP;
@@ -56,13 +57,25 @@ public class StatBlock : MonoBehaviour
         stamina = baseStam + (int)Math.Truncate(str/4D) + (int)Math.Truncate(agi/4D);
     }
 
-    public void AddAction(IAction newAction)
+    public void AddAction(TAction newAction)
     {
         actions.Add(newAction);
     }
 
-    public void RemoveAction(IAction newAction)
+    public void RemoveAction(TAction newAction)
     {
         actions.Remove(newAction);
+    }
+
+    public void TakeDamage(int amount){
+        currentHP -= amount;
+        if (currentHP<=0)
+            currentHP = 0;
+    }
+
+    public void HealDamage(int amount){
+        currentHP += amount;
+        if (currentHP>=HP)
+            currentHP = HP;
     }
 }

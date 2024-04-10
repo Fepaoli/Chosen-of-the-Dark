@@ -15,13 +15,6 @@ public class OverlayController : MonoBehaviour
         colorRenderer = gameObject.GetComponent<SpriteRenderer>();
         colorRenderer.color = Color.clear;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void ShowState(){
         switch(state){
             case TileState.Reachable:

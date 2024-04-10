@@ -5,14 +5,6 @@ using UnityEngine.EventSystems;
 
 public class CursorUIHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    void Update()
-    {
-        if (CursorController.Instance.isOnUI)
-        {
-            Debug.Log("overUI");
-        }
-    }
-
     public void OnPointerEnter(PointerEventData eventData)
     {
         CursorController.Instance.isOnUI = true;

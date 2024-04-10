@@ -18,7 +18,7 @@ public class CursorController : MonoBehaviour
             return CCInstance;
         }
     }
-    public IAction currentAction;
+    public TAction currentAction;
     public GameObject examinedTile;
     public GameObject examinedCreature;
     public GameObject map;
@@ -28,7 +28,7 @@ public class CursorController : MonoBehaviour
     public Vector2Int examinedCoords;
     private bool isCreatureSelected;
     public GameObject selectedCreature;
-    public bool targeting;
+    public bool targeting = false;
     public bool targetAllies;
     public GameObject targeter;
     public float targetingRange;
@@ -100,6 +100,7 @@ public class CursorController : MonoBehaviour
                             if (creaturePresent == null && tilePresent != null && !acting)
                             {
                                 Pathfinder creatureMove = selectedCreature.GetComponent<Pathfinder>();
+                                Debug.Log(creatureMove.pathfindingMap[examinedCoords].distance);
                                 if (creatureMove.IsTileReachable(examinedCoords))
                                 {
                                     acting = true;
@@ -137,12 +138,18 @@ public class CursorController : MonoBehaviour
                             else
                             {
                                 BattleUIManager.Instance.InspectCreature(examinedCreature);
+                                if (examinedCreature.GetComponent<StatBlock>().controlled){
+                                    BattleUIManager.Instance.gameObject.GetComponentInChildren<ActionController>().ShowActions(examinedCreature);
+                                }
                             }
                         }
                         else
                         {
                             if (creaturePresent != null)
                                 BattleUIManager.Instance.InspectCreature(examinedCreature);
+                                if (examinedCreature.GetComponent<StatBlock>().controlled){
+                                    BattleUIManager.Instance.gameObject.GetComponentInChildren<ActionController>().ShowActions(examinedCreature);
+                                }
                             else
                                 BattleUIManager.Instance.DeselectCreature();
                         }

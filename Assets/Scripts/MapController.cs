@@ -42,11 +42,11 @@ public class MapController : MonoBehaviour
                 TileController createdController = createdTile.GetComponent<TileController>();
                 createdController.overlay = createdOverlay.GetComponent<OverlayController>();
 
-
                 createdController.Setcoords(coords);
                 map.Add(coords, createdController);
             }
         }
+        InitiativeController.Instance.SetupPathfinding();
         StateManager.Instance.UpdateState(StateList.newround);
     }
 

@@ -23,7 +23,6 @@ public class Pathfinder : MonoBehaviour
     void Start()
     {
         StateManager.Instance.OnBattleStart.AddListener(InitMap);
-        StateManager.Instance.OnRoundStart.AddListener(CreatePathfindingMap);
         pathCoords = new List<Vector3>();
         gameObject.SetActive(false);
     }
@@ -133,7 +132,6 @@ public class Pathfinder : MonoBehaviour
                         if (altDist < neighbours[i].distance)
                         {
                             pathfindingMap[neighbours[i].coords] = new PathfindingGrid(neighbours[i].coords, altDist, u.coords);
-                            //Update distance inside list
                             Q.Remove(Q.Find(toupdate => toupdate.coords == neighbours[i].coords));
                             Q.Add(new PathfindingGrid(neighbours[i].coords, altDist, u.coords));
                         }

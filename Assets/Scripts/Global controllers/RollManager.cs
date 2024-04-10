@@ -16,6 +16,9 @@ public class RollManager : MonoBehaviour
             return RMInstance;
         }
     }
+    void Awake(){
+        RMInstance = this;
+    }
     // Start is called before the first frame update
     void Start()
     {

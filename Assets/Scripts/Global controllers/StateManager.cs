@@ -123,7 +123,7 @@ public class Playstart : IState
     public StateList stateType = StateList.battleStart;
     void IState.EnterState(){
         StateManager.Instance.map.SetActive(true);
-        StateManager.Instance.OnBattleStart.Invoke();
+        StateManager.Instance.OnBattleStart?.Invoke();
     }
     void IState.ExitState(){
 

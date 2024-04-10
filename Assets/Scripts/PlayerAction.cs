@@ -12,7 +12,7 @@ public class PlayerAction : MonoBehaviour
     public bool lookingForTarget = false;
     public GameObject currentTarget;
 
-    public List<IAction> actions;
+    public List<TAction> actions;
     // Update is called once per frame
     void Update()
     {
@@ -35,11 +35,11 @@ public class PlayerAction : MonoBehaviour
         lookingForTarget = true;
     }
 
-    public void AddActions (IAction newaction){
+    public void AddActions (TAction newaction){
         actions.Add(newaction);
     }
 
-    public void RemoveActions (IAction newaction){
+    public void RemoveActions (TAction newaction){
         actions.Remove(newaction);
     }
 }
