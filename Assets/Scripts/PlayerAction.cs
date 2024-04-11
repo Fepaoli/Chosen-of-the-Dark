@@ -18,18 +18,9 @@ public class PlayerAction : MonoBehaviour
     }
 
     public void TurnReset(){
-        Debug.Log("TurnReset called for" + gameObject);
         actionsleft = 1;
         pathfinding.moveLeft = pathfinding.speed;
         pathfinding.CreatePathfindingMap();
         pathfinding.DefinePaths(pathfinding.coords, pathfinding.moveLeft);
-    }
-
-    public void LookForTarget(bool ally, float range){
-        CursorController.Instance.targeting = true;
-        CursorController.Instance.targeter = gameObject;
-        CursorController.Instance.targetAllies = ally;
-        CursorController.Instance.targetingRange = range;
-        lookingForTarget = true;
     }
 }

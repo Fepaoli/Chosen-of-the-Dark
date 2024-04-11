@@ -29,7 +29,6 @@ public class CursorController : MonoBehaviour
     private bool isCreatureSelected;
     public GameObject selectedCreature;
     public bool targeting = false;
-    public bool targetAllies;
     public GameObject targeter;
     public float targetingRange;
     public bool acting;
@@ -80,16 +79,19 @@ public class CursorController : MonoBehaviour
             if (!isOnUI){
                 if (targeting){
                     if (Input.GetMouseButtonDown(0)){
-                        if (creaturePresent != null && examinedCreature.GetComponent<StatBlock>().controlled == targetAllies)
+                        if (creaturePresent != null)
                         {
-                            selectedCreature.GetComponent<PlayerAction>().currentTarget = examinedCreature;
-                            targeting = false;
+                            Debug.Log("Getting target");
+                            currentAction.GetTarget(examinedCreature);
                         }
                     }
                     else
                         if (Input.GetMouseButtonDown(1)){
-                            targeting = false;
-                            selectedCreature.GetComponent<PlayerAction>().lookingForTarget = false;
+                            Debug.Log("Interrupting targeting");
+                            currentAction.StopTargeting();
+                            foreach(Transform btn in InitiativeController.Instance.gameObject.transform.GetChild(1)){
+                                btn.gameObject.GetComponent<ActionBtn>().ResetButton();
+                            }
                         }
                 }
                 else{
@@ -100,7 +102,6 @@ public class CursorController : MonoBehaviour
                             if (creaturePresent == null && tilePresent != null && !acting)
                             {
                                 Pathfinder creatureMove = selectedCreature.GetComponent<Pathfinder>();
-                                Debug.Log(creatureMove.pathfindingMap[examinedCoords].distance);
                                 if (creatureMove.IsTileReachable(examinedCoords))
                                 {
                                     acting = true;
@@ -117,7 +118,6 @@ public class CursorController : MonoBehaviour
                             {
                                 if (examinedCreature.GetComponent<StatBlock>().controlled && InitiativeController.Instance.IsActing(examinedCreature))
                                 {
-                                    Debug.Log(InitiativeController.Instance.IsActing(examinedCreature));
                                     selectedCreature = examinedCreature;
                                     isCreatureSelected = true;
                                     UpdateOverlays();
@@ -138,20 +138,16 @@ public class CursorController : MonoBehaviour
                             else
                             {
                                 BattleUIManager.Instance.InspectCreature(examinedCreature);
-                                if (examinedCreature.GetComponent<StatBlock>().controlled){
-                                    BattleUIManager.Instance.gameObject.GetComponentInChildren<ActionController>().ShowActions(examinedCreature);
-                                }
                             }
                         }
                         else
                         {
                             if (creaturePresent != null)
                                 BattleUIManager.Instance.InspectCreature(examinedCreature);
-                                if (examinedCreature.GetComponent<StatBlock>().controlled){
-                                    BattleUIManager.Instance.gameObject.GetComponentInChildren<ActionController>().ShowActions(examinedCreature);
-                                }
-                            else
+                            else{
                                 BattleUIManager.Instance.DeselectCreature();
+                                Deselect();
+                            }
                         }
                     }
                 }
@@ -160,7 +156,6 @@ public class CursorController : MonoBehaviour
     }
 
     public void Deselect(){
-        Debug.Log("Creature not selected anymore");
         isCreatureSelected = false;
         if (selectedCreature != null){
             selectedCreature.GetComponent<Pathfinder>().Deselect();
@@ -190,7 +185,6 @@ public class CursorController : MonoBehaviour
     }
     
     public void UpdateOverlays(){
-        Debug.Log("Updating overlays");
         selectedCreature.GetComponent<Pathfinder>().UpdateMoveMap();
     }
 }

@@ -8,12 +8,10 @@ public class CursorUIHandler : MonoBehaviour, IPointerEnterHandler, IPointerExit
     public void OnPointerEnter(PointerEventData eventData)
     {
         CursorController.Instance.isOnUI = true;
-        Debug.Log("Mouse enter");
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         CursorController.Instance.isOnUI = false;
-        Debug.Log("Mouse exit");
     }
 }

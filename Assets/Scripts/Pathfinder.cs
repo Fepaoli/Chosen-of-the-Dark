@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +7,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
+
 
 public class Pathfinder : MonoBehaviour
 {
@@ -19,7 +21,6 @@ public class Pathfinder : MonoBehaviour
 
     public float moveLeft;
     public float speed;
-
     void Start()
     {
         StateManager.Instance.OnBattleStart.AddListener(InitMap);
@@ -44,6 +45,7 @@ public class Pathfinder : MonoBehaviour
             }
             else
             {
+                coords = mapFunctions.WorldToGrid(transform.position);
                 moveLeft -= pathfindingMap[coords].distance;
                 moving = false;
                 CursorController.Instance.acting = false;
@@ -55,13 +57,12 @@ public class Pathfinder : MonoBehaviour
     }
 
     public void InitMap(){
-        gameObject.SetActive(true);
         coords = mapFunctions.WorldToGrid(gameObject.transform.position);
+        map = new Dictionary<Vector2Int, TileController>();
         map = mapFunctions.map;
 
         //placeholder
         speed = 10;
-        Debug.Log("Initmap finished");
     }
 
     public void MoveTo(Vector2Int target)
@@ -70,12 +71,10 @@ public class Pathfinder : MonoBehaviour
         moving = true;
         while (pathfindingMap[target].previous != pathfindingMap[target].coords)
         {
-            Debug.Log(target);
             pathCoords.Add(mapFunctions.GridToWorld(target));
             target = pathfindingMap[target].previous;
         }
         pathCoords.Reverse();
-        Debug.Log("Moveto finished");
     }
 
     public bool IsTileReachable(Vector2Int coords)
@@ -91,7 +90,6 @@ public class Pathfinder : MonoBehaviour
         {
             pathfindingMap.Add(x.coords, new PathfindingGrid(x.coords, 300, x.coords));
         }
-        Debug.Log("create map finished");
     }
     public void DefinePaths(Vector2Int position, float movespeed)
     {
@@ -124,7 +122,7 @@ public class Pathfinder : MonoBehaviour
                             diagonal = true;                        
                         }
                         if (diagonal){
-                            altDist = u.distance + (map[neighbours[i].coords].moveMult * 1.4F);
+                            altDist = u.distance + (map[neighbours[i].coords].moveMult * (float)Math.Sqrt(2));
                         }
                         else{
                             altDist = u.distance + map[neighbours[i].coords].moveMult;
@@ -142,7 +140,6 @@ public class Pathfinder : MonoBehaviour
                 map[u.coords].overlay.state = OverlayController.TileState.NotReachable;
             }
         }
-        Debug.Log("finish pathfinding finished");
     }
 
     public List<PathfindingGrid> FindNeighbours (Vector2Int position)

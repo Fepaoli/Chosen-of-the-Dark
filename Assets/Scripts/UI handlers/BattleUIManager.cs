@@ -55,6 +55,7 @@ public class BattleUIManager : MonoBehaviour
     }
 
     public void InspectCreature(GameObject creature){
+        gameObject.transform.GetChild(0).GetComponent<ActionController>().HideActions();
         creatureStats.SetActive(true);
         creatureName.SetActive(true);
         creatureInspector.SetActive(true);
@@ -70,6 +71,9 @@ public class BattleUIManager : MonoBehaviour
                 stamina += "|";
         }
         creatureStats.GetComponent<TMP_Text>().SetText("Str: " + stats.str + " Agi: " + stats.agi + " Wit: " + stats.wit + " Emp: " + stats.emp + "\nHP = " + stats.currentHP + "/" + stats.HP + " WP = " + stats.currentWP + "/" + stats.WP + " Stamina = " + stamina);
+        if (creature.GetComponent<StatBlock>().controlled){
+            gameObject.transform.GetChild(0).GetComponent<ActionController>().ShowActions(creature);
+        }
     }
 
     public void InspectTerrain(GameObject terrain){

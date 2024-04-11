@@ -1,4 +1,5 @@
 using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using Unity.VisualScripting;
@@ -25,7 +26,6 @@ public class InitiativeController : MonoBehaviour
     public int actorIndex;
     public Transform parent;
     //Action test
-    public TAction baseAttack;
 
     private void Awake()
     {
@@ -35,7 +35,6 @@ public class InitiativeController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        baseAttack = new Attack(1.5F);
         parent = gameObject.transform;
         actorIndex = 0;
         StateManager.Instance.OnBattleStart.AddListener(RollInitiative);
@@ -54,7 +53,7 @@ public class InitiativeController : MonoBehaviour
             child.gameObject.SetActive(true);
             InitiativeOrder.Add(child.gameObject);
             child.gameObject.GetComponent<StatBlock>().RollInitiative();
-            child.gameObject.GetComponent<StatBlock>().AddAction(baseAttack);
+            child.gameObject.GetComponent<StatBlock>().AddAction(new Attack(1.5F, child.gameObject));
         }
 
         // Finalize initiative order
@@ -101,17 +100,18 @@ public class InitiativeController : MonoBehaviour
             NextInInitiative();
         }
     }
-
     public void SetupPathfinding(){
         // Get enemies
         foreach (Transform child in parent.GetChild(0)){
             child.gameObject.SetActive(true);
+            child.gameObject.GetComponent<Pathfinder>().InitMap();
             InitiativeOrder.Add(child.gameObject);
             child.gameObject.GetComponent<StatBlock>().RollInitiative();
         }
         // Get party
         foreach (Transform child in parent.GetChild(1)){
             child.gameObject.SetActive(true);
+            child.gameObject.GetComponent<Pathfinder>().InitMap();
             InitiativeOrder.Add(child.gameObject);
             child.gameObject.GetComponent<StatBlock>().RollInitiative();
         }
@@ -119,11 +119,27 @@ public class InitiativeController : MonoBehaviour
 }
 
 public class Attack : TAction{
-    public Attack(float attRange) : base(attRange){}
-    public new void Execute(){
-        int damage = RollManager.Instance.RollContested(boundStats.HWSkill,boundStats.agi,targetStats.HWSkill,targetStats.agi);
+    public int attackDice;
+    public int attackMod;
+    public int type;
+    public Attack(float range, GameObject boundCreature) : base(range, boundCreature){}
+
+    public void ChangeAttackType(int attD, int attM, int attT){
+        attackDice = attD;
+        attackMod = attM;
+        type = attT;
+    }
+    public override void Execute(){
+        int damage = 0;
+        if (type == 0)
+            damage = RollManager.Instance.RollContested(boundStats.agi + boundStats.LWSkill,boundStats.agi,targetStats.agi + targetStats.lightDef,targetStats.agi);
+        if (type == 1)
+            damage = RollManager.Instance.RollContested(boundStats.str + boundStats.MWSkill,boundStats.agi,targetStats.agi + targetStats.medDef,targetStats.agi);
+        if (type == 2)
+            damage = RollManager.Instance.RollContested(boundStats.str + boundStats.HWSkill,boundStats.str,targetStats.agi + targetStats.heavyDef,targetStats.agi);
+        Debug.Log("Rolled damage = " + damage);
         targetStats.TakeDamage(damage);
-        CursorController.Instance.targeting = false;
-        CursorController.Instance.currentAction = null;
+        StopTargeting();
+        boundCreature.GetComponent<PlayerAction>().actionsleft -= 1;
     }
 }

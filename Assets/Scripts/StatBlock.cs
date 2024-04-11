@@ -21,6 +21,9 @@ public class StatBlock : MonoBehaviour
     public int HRWSkill;
     public int DMSkill;
     public int OMSkill;
+    public int lightDef;
+    public int medDef;
+    public int heavyDef;
     public int baseSpeed;
     public int HP;
     public int currentHP;

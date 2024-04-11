@@ -135,10 +135,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controlled: 1
-  str: 0
-  agi: 2
-  wit: 0
-  emp: 0
+  str: 2
+  agi: 3
+  wit: 4
+  emp: 1
   traits: 
   LWSkill: 0
   MWSkill: 0
@@ -151,8 +151,10 @@ MonoBehaviour:
   HP: 0
   currentHP: 0
   WP: 0
+  currentWP: 0
   baseStam: 0
   stamina: 0
+  staminaLeft: 0
   RolledInitiative: 0
 --- !u!70 &6852956859818665824
 CapsuleCollider2D:

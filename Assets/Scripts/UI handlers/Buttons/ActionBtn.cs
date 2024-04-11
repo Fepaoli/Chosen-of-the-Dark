@@ -14,19 +14,30 @@ public class ActionBtn : MonoBehaviour
     {
         btn = gameObject.GetComponent<Button>();
     }
-    public void LinkButton(GameObject actor, TAction action){
+    public void LinkButton(GameObject creature, TAction action){
+        actor = creature;
         linkedAction = action;
         btn.onClick.AddListener(SelectButton);
     }
 
+    public void MoveButton(Vector3 coords){
+        gameObject.transform.position = coords;
+    }
+    public void ResetButton(){
+        pressed = false;
+    }
     public void SelectButton(){
         if (pressed){
             linkedAction.StopTargeting();
+            CursorController.Instance.targeting = false;
             pressed = false;
         }
         else{
-            linkedAction.StartTargeting();
-            pressed = true;
+            if (actor.GetComponent<PlayerAction>().actionsleft >0){
+                pressed = true;
+                linkedAction.StartTargeting();
+                CursorController.Instance.targeting = true;
+            }
         }
     }
 }
