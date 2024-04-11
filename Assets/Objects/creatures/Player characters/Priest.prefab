@@ -140,13 +140,16 @@ MonoBehaviour:
   wit: 4
   emp: 1
   traits: 
-  LWSkill: 0
-  MWSkill: 0
-  HWSkill: 0
-  LRWSkill: 0
-  HRWSkill: 0
-  DMSkill: 0
-  OMSkill: 0
+  LWSkill: 3
+  MWSkill: 2
+  HWSkill: 2
+  LRWSkill: 2
+  HRWSkill: 2
+  DMSkill: 5
+  OMSkill: 3
+  lightDef: 3
+  medDef: 2
+  heavyDef: 1
   baseSpeed: 2
   HP: 0
   currentHP: 0

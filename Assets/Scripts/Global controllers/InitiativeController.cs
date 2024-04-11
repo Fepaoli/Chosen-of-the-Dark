@@ -118,28 +118,3 @@ public class InitiativeController : MonoBehaviour
     }
 }
 
-public class Attack : TAction{
-    public int attackDice;
-    public int attackMod;
-    public int type;
-    public Attack(float range, GameObject boundCreature) : base(range, boundCreature){}
-
-    public void ChangeAttackType(int attD, int attM, int attT){
-        attackDice = attD;
-        attackMod = attM;
-        type = attT;
-    }
-    public override void Execute(){
-        int damage = 0;
-        if (type == 0)
-            damage = RollManager.Instance.RollContested(boundStats.agi + boundStats.LWSkill,boundStats.agi,targetStats.agi + targetStats.lightDef,targetStats.agi);
-        if (type == 1)
-            damage = RollManager.Instance.RollContested(boundStats.str + boundStats.MWSkill,boundStats.agi,targetStats.agi + targetStats.medDef,targetStats.agi);
-        if (type == 2)
-            damage = RollManager.Instance.RollContested(boundStats.str + boundStats.HWSkill,boundStats.str,targetStats.agi + targetStats.heavyDef,targetStats.agi);
-        Debug.Log("Rolled damage = " + damage);
-        targetStats.TakeDamage(damage);
-        StopTargeting();
-        boundCreature.GetComponent<PlayerAction>().actionsleft -= 1;
-    }
-}
