@@ -196,11 +196,11 @@ PrefabInstance:
       objectReference: {fileID: 143874852}
     - target: {fileID: 5476749445126475703, guid: 940d54d5ce3ef5647b19b034853e57cc, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 12.68
+      value: 12.89
       objectReference: {fileID: 0}
     - target: {fileID: 5476749445126475703, guid: 940d54d5ce3ef5647b19b034853e57cc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.55
+      value: 1.12
       objectReference: {fileID: 0}
     - target: {fileID: 5476749445126475703, guid: 940d54d5ce3ef5647b19b034853e57cc, type: 3}
       propertyPath: m_LocalPosition.z
@@ -236,7 +236,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6549089572199354855, guid: 940d54d5ce3ef5647b19b034853e57cc, type: 3}
       propertyPath: m_Name
-      value: General
+      value: Hunter
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

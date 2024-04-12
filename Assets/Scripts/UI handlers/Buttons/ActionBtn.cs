@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 using UnityEngine.UI;
 
 public class ActionBtn : MonoBehaviour
@@ -18,10 +19,11 @@ public class ActionBtn : MonoBehaviour
         actor = creature;
         linkedAction = action;
         btn.onClick.AddListener(SelectButton);
+        GetComponentInChildren<TMP_Text>().text = linkedAction.actionName;
     }
 
     public void MoveButton(Vector3 coords){
-        gameObject.transform.position = coords;
+        gameObject.GetComponent<RectTransform>().localPosition = coords;
     }
     public void ResetButton(){
         pressed = false;

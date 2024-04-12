@@ -11,6 +11,7 @@ public class TAction
     public GameObject boundCreature;
     public StatBlock boundStats;
     public float range;
+    public string actionName;
     public TAction(){
         
     }
@@ -22,6 +23,14 @@ public class TAction
         range = attRange;
         boundCreature = attActor;
         boundStats = attActor.GetComponent<StatBlock>();
+    }
+
+    public TAction(float attRange, GameObject attActor, string name)
+    {
+        range = attRange;
+        boundCreature = attActor;
+        boundStats = attActor.GetComponent<StatBlock>();
+        actionName = name;
     }
     public virtual void StartTargeting(){
         Debug.Log("Start targeting");

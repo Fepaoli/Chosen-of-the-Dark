@@ -9,12 +9,14 @@ public class ActionController : MonoBehaviour
     public void ShowActions(GameObject creature)
     {
         Debug.Log("Executing button creation algorithm");
+        Vector3 buttonPosition = new Vector3(0, -50, 0);
         selectedCharacter = creature.GetComponent<StatBlock>();
         foreach (TAction action in selectedCharacter.actions){
             Debug.Log("Repeating cyle");
-            GameObject newButton = Instantiate(buttonTemplate, gameObject.transform);
+            GameObject newButton = Instantiate(buttonTemplate, gameObject.transform, false);
             newButton.GetComponent<ActionBtn>().LinkButton(creature,action);
-            newButton.GetComponent<ActionBtn>().MoveButton(new Vector3 (0,-50,0));
+            newButton.GetComponent<ActionBtn>().MoveButton(buttonPosition);
+            buttonPosition += new Vector3(0, -30, 0);
         }
     }
 

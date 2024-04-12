@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
+using UnityEditor.Experimental.GraphView;
 
 public class InitiativeController : MonoBehaviour
 {
@@ -53,7 +54,25 @@ public class InitiativeController : MonoBehaviour
             child.gameObject.SetActive(true);
             InitiativeOrder.Add(child.gameObject);
             child.gameObject.GetComponent<StatBlock>().RollInitiative();
-            child.gameObject.GetComponent<StatBlock>().AddAction(new Attack(1.5F, child.gameObject));
+            //Placeholder: manually assigns attacks to all party members
+            string name = child.gameObject.name;
+            if (name == "Priest")
+                child.gameObject.GetComponent<StatBlock>().AddAction(new LightMeleeAttack(1.5F, child.gameObject,"Mace"));
+            else if (name == "General")
+                child.gameObject.GetComponent<StatBlock>().AddAction(new HeavyMeleeAttack(1.5F, child.gameObject,"Greatsword"));
+            else if (name == "Hunter"){
+                child.gameObject.GetComponent<StatBlock>().AddAction(new LightMeleeAttack(1.5F, child.gameObject,"Shortsword"));
+                child.gameObject.GetComponent<StatBlock>().AddAction(new LightRangedAttack(7.5F, child.gameObject,"Hunting bow"));
+            }
+            else if (name == "Bureaucrat"){
+                child.gameObject.GetComponent<StatBlock>().AddAction(new MediumMeleeAttack(1.5F, child.gameObject,"Longsword"));
+            }
+            else if (name == "Hero")
+            {
+                child.gameObject.GetComponent<StatBlock>().AddAction(new MediumMeleeAttack(1.5F, child.gameObject,"Warhammer"));
+                child.gameObject.GetComponent<StatBlock>().AddAction(new HeavyRangedAttack(1.5F, child.gameObject,"Longbow"));
+            }
+
         }
 
         // Finalize initiative order

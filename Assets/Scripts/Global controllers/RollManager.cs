@@ -42,7 +42,7 @@ public class RollManager : MonoBehaviour
         return successes;
     }
 
-    public int RollContested (int dice, int bonus, int enemydice, int enemybonus){
+    public int RollContested (int dice, int bonus, int enemydice, int enemybonus, int enemythreshold){
         int successes = 0;
         for (int i = 0; i<dice ; i++){
             int roll = UnityEngine.Random.Range(1,21) + (bonus);
@@ -52,15 +52,11 @@ public class RollManager : MonoBehaviour
                 }
             }
             else{
-                if (roll > enemybonus){
+                if (roll > enemythreshold){
                     successes += 1;
                 }
             }
         }
         return successes;
-    }
-
-    public bool RollContestedBinary (int dice, int bonus, int enemydice, int enemybonus){
-        return true;
     }
 }
