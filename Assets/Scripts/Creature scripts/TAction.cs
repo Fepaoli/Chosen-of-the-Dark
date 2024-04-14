@@ -43,18 +43,11 @@ public class TAction
         CursorController.Instance.currentAction = null;
     }
     public virtual void GetTarget(GameObject target){
-        Debug.Log ("Actor = " + boundCreature.name);
-        Debug.Log ("Target = " + target.name);
         int boundx = boundCreature.GetComponent<Pathfinder>().coords[0];
         int boundy = boundCreature.GetComponent<Pathfinder>().coords[1];
         int targetx = target.GetComponent<Pathfinder>().coords[0]; 
         int targety = target.GetComponent<Pathfinder>().coords[1]; 
-        Debug.Log("creature coordinates: " + boundx + " " + boundy);
-        Debug.Log("target coordinates: " + targetx + " " + targety);
-        Debug.Log("Distance = " + Math.Sqrt(Math.Pow(Math.Abs(boundx - targetx),2)+ Math.Pow(Math.Abs(boundy - targety), 2)));
-        Debug.Log("Range = " + range);
         if (Math.Sqrt(Math.Pow(Math.Abs(boundx - targetx),2)+ Math.Pow(Math.Abs(boundy - targety), 2)) <= range){
-            Debug.Log("Eligible target found");
             targetStats = target.GetComponent<StatBlock>();
             actionTarget = target;
             Execute();

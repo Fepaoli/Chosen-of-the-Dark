@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static Pathfinder;
 
@@ -11,7 +12,7 @@ public class AutoAction : MonoBehaviour
     public List<GameObject> PartyMembers;
     public List<TAction> ActionList;
     public Dictionary<Vector2Int, EvaluatedCell> CellValues;
-    public Dictionary<Vector2Int, EvaluatedCell> CellsInRange;
+    public Dictionary<Vector2Int, GameObject> EnemiesInRange;
 
     void Start()
     {
@@ -35,12 +36,38 @@ public class AutoAction : MonoBehaviour
         pathfinder.moveLeft = pathfinder.speed;
         pathfinder.CreatePathfindingMap();
         pathfinder.DefinePaths(pathfinder.coords,pathfinder.speed);
-        FindCellValues();
-        Debug.Log("Enemy should have acted but AI doesn't know how to do that yet");
-        Move();
+        Act();
     }
 
-    public void Move()
+    public void Act(){
+        FindCellValues();
+        //If there are reachable enemies, choose one to attack
+        if (EnemiesInRange.Any()){
+            float minDist = 300;
+            GameObject chosenTarget = null;
+            Vector2Int chosenCoords = pathfinder.coords;
+            foreach(Vector2Int attackingCoords in EnemiesInRange.Keys){
+                if (pathfinder.pathfindingMap[attackingCoords].distance < minDist){
+                    minDist = pathfinder.pathfindingMap[attackingCoords].distance;
+                    chosenTarget = EnemiesInRange[attackingCoords];
+                    chosenCoords = attackingCoords;
+                }
+            }
+            pathfinder.MoveTo(chosenCoords);
+            Attack (chosenTarget);
+        }
+        //If there are none, move to the best value cell and wait
+        else
+            ValueBasedMove();
+    }
+
+    public void Attack (GameObject target){
+        attack.actionTarget = target;
+        attack.targetStats = target.GetComponent<StatBlock>();
+        attack.Execute();
+        actionsleft -= 1;
+    }
+    public void ValueBasedMove()
     {
         Vector2Int maxValueCell = pathfinder.coords;
         float maxvalue = CellValues[maxValueCell].totalValue;
@@ -60,11 +87,11 @@ public class AutoAction : MonoBehaviour
             }
                 
         }
-
         pathfinder.MoveTo(maxValueCell);
     }
     public void FindCellValues()
     {
+        EnemiesInRange = new Dictionary<Vector2Int, GameObject>();
         foreach (Vector2Int x in MapController.Instance.map.Keys)
         {
             if (pathfinder.IsTileReachable(x))
@@ -85,7 +112,10 @@ public class AutoAction : MonoBehaviour
                     {
                         if (MapController.Instance.calcLOSDistance(x, enemyDistance.coords) <= checkedAction.range)
                         {
-                            CellValues[x].offensiveValues.Add(1);
+                            CellValues[x].offensiveValues.Add(1.2F);
+                            if (!EnemiesInRange.ContainsKey(x)){
+                                EnemiesInRange.Add(x, child.gameObject);
+                            }
                         }
                         else
                         {
