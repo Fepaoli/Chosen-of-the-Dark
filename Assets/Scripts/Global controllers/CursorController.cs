@@ -185,6 +185,7 @@ public class CursorController : MonoBehaviour
     }
     
     public void UpdateOverlays(){
+        Debug.Log("UpdateOverlays Called");
         selectedCreature.GetComponent<Pathfinder>().UpdateMoveMap();
     }
 }

@@ -15,7 +15,7 @@ public class Pathfinder : MonoBehaviour
     public Dictionary<Vector2Int, TileController> map;
     public Dictionary<Vector2Int, PathfindingGrid> pathfindingMap;
     public Vector2Int coords;
-    private bool moving = false;
+    public bool moving = false;
     private List<Vector3> pathCoords;
     public List<PathfindingGrid> Q;
 
@@ -51,7 +51,8 @@ public class Pathfinder : MonoBehaviour
                 CursorController.Instance.acting = false;
                 CreatePathfindingMap();
                 DefinePaths(coords, moveLeft);
-                UpdateMoveMap();
+                if (gameObject.GetComponent<StatBlock>().controlled)
+                    UpdateMoveMap();
             }
         }
     }
@@ -79,7 +80,7 @@ public class Pathfinder : MonoBehaviour
 
     public bool IsTileReachable(Vector2Int coords)
     {
-        return (pathfindingMap[coords].distance <= moveLeft) && (map[coords].walkable);
+        return (pathfindingMap[coords].distance <= moveLeft);
     }
 
     public void CreatePathfindingMap()
@@ -93,6 +94,7 @@ public class Pathfinder : MonoBehaviour
     }
     public void DefinePaths(Vector2Int position, float movespeed)
     {
+        bool playerControlled = gameObject.GetComponent<StatBlock>().controlled;
         //Initialize starting cell
         PathfindingGrid startingcell = new PathfindingGrid (position, 0, position);
         pathfindingMap[position] = startingcell;
@@ -110,7 +112,10 @@ public class Pathfinder : MonoBehaviour
             PathfindingGrid u = Q.First();
             Q.Remove(Q.First());
             if (u.distance <= moveLeft){
-                map[u.coords].overlay.state = OverlayController.TileState.Reachable;
+                if (playerControlled)
+                {
+                    map[u.coords].overlay.state = OverlayController.TileState.Reachable;
+                }
                 List<PathfindingGrid> neighbours = FindNeighbours(u.coords);
                 for (int i = 0; i < neighbours.Count(); i++)
                 {
@@ -136,7 +141,8 @@ public class Pathfinder : MonoBehaviour
                     }
                 }
             }
-            else{
+            else if (playerControlled)
+            {
                 map[u.coords].overlay.state = OverlayController.TileState.NotReachable;
             }
         }

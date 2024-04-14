@@ -16,7 +16,8 @@ public class OverlayController : MonoBehaviour
         colorRenderer.color = Color.clear;
     }
     public void ShowState(){
-        switch(state){
+        Debug.Log("ShowState Called");
+        switch (state){
             case TileState.Reachable:
                 colorRenderer.color = new Color(0,1.0F,0.25F,0.25F);
                 break;

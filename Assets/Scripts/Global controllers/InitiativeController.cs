@@ -48,6 +48,7 @@ public class InitiativeController : MonoBehaviour
             child.gameObject.SetActive(true);
             InitiativeOrder.Add(child.gameObject);
             child.gameObject.GetComponent<StatBlock>().RollInitiative();
+            Debug.Log("Added Wolf to initiative");
         }
         // Get party
         foreach (Transform child in parent.GetChild(1)){
@@ -56,6 +57,7 @@ public class InitiativeController : MonoBehaviour
             child.gameObject.GetComponent<StatBlock>().RollInitiative();
             //Placeholder: manually assigns attacks to all party members
             string name = child.gameObject.name;
+            Debug.Log("Added " + name + " to initiative");
             if (name == "Priest")
                 child.gameObject.GetComponent<StatBlock>().AddAction(new LightMeleeAttack(1.5F, child.gameObject,"Mace"));
             else if (name == "General")
@@ -119,20 +121,18 @@ public class InitiativeController : MonoBehaviour
             NextInInitiative();
         }
     }
-    public void SetupPathfinding(){
+    public void SetupPathfinding()
+    {
         // Get enemies
-        foreach (Transform child in parent.GetChild(0)){
-            child.gameObject.SetActive(true);
+        foreach (Transform child in parent.GetChild(0))
+        {
             child.gameObject.GetComponent<Pathfinder>().InitMap();
-            InitiativeOrder.Add(child.gameObject);
-            child.gameObject.GetComponent<StatBlock>().RollInitiative();
+            child.gameObject.GetComponent<AutoAction>().InitTargetingMap();
         }
         // Get party
-        foreach (Transform child in parent.GetChild(1)){
-            child.gameObject.SetActive(true);
+        foreach (Transform child in parent.GetChild(1))
+        {
             child.gameObject.GetComponent<Pathfinder>().InitMap();
-            InitiativeOrder.Add(child.gameObject);
-            child.gameObject.GetComponent<StatBlock>().RollInitiative();
         }
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
@@ -10,6 +11,23 @@ public class MapController : MonoBehaviour
     public GameObject levelGrid;
 
     public Dictionary<Vector2Int, TileController> map;
+
+    private static MapController MCinstance;
+    public static MapController Instance
+    {
+        get
+        {
+            if (MCinstance == null)
+            {
+                Debug.Log("Map?");
+            }
+            return MCinstance;
+        }
+    }
+    private void Awake()
+    {
+        MCinstance = this;
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -48,6 +66,12 @@ public class MapController : MonoBehaviour
         }
         InitiativeController.Instance.SetupPathfinding();
         StateManager.Instance.UpdateState(StateList.newround);
+    }
+
+    public float calcLOSDistance(Vector2Int startingCell, Vector2Int targetCell)
+    {
+        float distance = (float)Math.Sqrt(Math.Pow(Math.Abs(startingCell[0] - targetCell[0]), 2) + Math.Pow(Math.Abs(startingCell[1] - targetCell[1]), 2));
+        return distance;
     }
 
     public Vector2Int WorldToGrid(Vector3 coordinates)
