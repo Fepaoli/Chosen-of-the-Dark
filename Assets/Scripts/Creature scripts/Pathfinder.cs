@@ -114,7 +114,7 @@ public class Pathfinder : MonoBehaviour
             if (u.distance <= moveLeft){
                 if (playerControlled)
                 {
-                    map[u.coords].overlay.state = OverlayController.TileState.Reachable;
+                    map[u.coords].overlay.moveState = OverlayController.TileState.Reachable;
                 }
                 List<PathfindingGrid> neighbours = FindNeighbours(u.coords);
                 for (int i = 0; i < neighbours.Count(); i++)
@@ -143,7 +143,7 @@ public class Pathfinder : MonoBehaviour
             }
             else if (playerControlled)
             {
-                map[u.coords].overlay.state = OverlayController.TileState.NotReachable;
+                map[u.coords].overlay.moveState = OverlayController.TileState.NotReachable;
             }
         }
     }
@@ -170,7 +170,7 @@ public class Pathfinder : MonoBehaviour
 
     public void UpdateMoveMap (){
         foreach (KeyValuePair<Vector2Int, TileController> x in map){
-            x.Value.overlay.ShowState();
+            x.Value.overlay.ShowMoveState();
         }
     }
     public struct PathfindingGrid

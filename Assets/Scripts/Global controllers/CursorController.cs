@@ -99,6 +99,7 @@ public class CursorController : MonoBehaviour
                     {
                         if (isCreatureSelected)
                         {
+                            UpdateOverlays();
                             if (creaturePresent == null && tilePresent != null && !acting)
                             {
                                 Pathfinder creatureMove = selectedCreature.GetComponent<Pathfinder>();
@@ -152,6 +153,24 @@ public class CursorController : MonoBehaviour
                     }
                 }
             }
+        }
+    }
+    public void ShowActionRange (TAction action, Pathfinder actor){
+        foreach (Vector2Int x in MapController.Instance.map.Keys){
+            if (MapController.Instance.calcLOSDistance(x,actor.coords)<=action.range){
+                MapController.Instance.map[x].overlay.threatState = OverlayController.TileState.Threatened;
+                MapController.Instance.map[x].overlay.ShowThreatState();
+            }
+            else{
+                MapController.Instance.map[x].overlay.threatState = OverlayController.TileState.NotReachable;
+                MapController.Instance.map[x].overlay.ShowThreatState();
+            }
+        }
+    }
+
+    public void HideActionRange (){
+        foreach (Vector2Int x in MapController.Instance.map.Keys){
+            MapController.Instance.map[x].overlay.Hide();
         }
     }
 

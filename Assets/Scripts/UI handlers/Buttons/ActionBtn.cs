@@ -33,12 +33,13 @@ public class ActionBtn : MonoBehaviour
             linkedAction.StopTargeting();
             CursorController.Instance.targeting = false;
             pressed = false;
-        }
+        }   
         else{
-            if (actor.GetComponent<PlayerAction>().actionsleft >0){
+            if (actor.GetComponent<PlayerAction>().actionsleft>0){
                 pressed = true;
                 linkedAction.StartTargeting();
                 CursorController.Instance.targeting = true;
+                CursorController.Instance.ShowActionRange(linkedAction, actor.GetComponent<Pathfinder>());
             }
         }
     }

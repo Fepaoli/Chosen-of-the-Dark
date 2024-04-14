@@ -41,16 +41,20 @@ public class TAction
         Debug.Log("Stop targeting");
         CursorController.Instance.targeting = false;
         CursorController.Instance.currentAction = null;
+        CursorController.Instance.HideActionRange();
+        boundCreature.GetComponent<Pathfinder>().UpdateMoveMap();
     }
     public virtual void GetTarget(GameObject target){
-        int boundx = boundCreature.GetComponent<Pathfinder>().coords[0];
-        int boundy = boundCreature.GetComponent<Pathfinder>().coords[1];
-        int targetx = target.GetComponent<Pathfinder>().coords[0]; 
-        int targety = target.GetComponent<Pathfinder>().coords[1]; 
-        if (Math.Sqrt(Math.Pow(Math.Abs(boundx - targetx),2)+ Math.Pow(Math.Abs(boundy - targety), 2)) <= range){
-            targetStats = target.GetComponent<StatBlock>();
-            actionTarget = target;
-            Execute();
+        if (target != boundCreature){
+            int boundx = boundCreature.GetComponent<Pathfinder>().coords[0];
+            int boundy = boundCreature.GetComponent<Pathfinder>().coords[1];
+            int targetx = target.GetComponent<Pathfinder>().coords[0]; 
+            int targety = target.GetComponent<Pathfinder>().coords[1]; 
+            if (Math.Sqrt(Math.Pow(Math.Abs(boundx - targetx),2)+ Math.Pow(Math.Abs(boundy - targety), 2)) <= range){
+                targetStats = target.GetComponent<StatBlock>();
+                actionTarget = target;
+                Execute();
+            }
         }
     }
     public virtual void Execute(){
