@@ -8,7 +8,8 @@ public class LightMeleeAttack : TAction{
     int creaturemod;
     int targetmod;
     int threshold;
-    public LightMeleeAttack(float range, GameObject boundCreature, string actionName) : base(range, boundCreature, actionName){}
+    public LightMeleeAttack(float range, GameObject boundCreature, string actionName) : base(range, boundCreature, actionName){
+    }
     public override void Execute(){
         creaturedice = boundStats.agi + boundStats.LWSkill;
         targetdice = targetStats.agi + targetStats.lightDef;

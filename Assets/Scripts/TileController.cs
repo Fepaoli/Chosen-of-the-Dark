@@ -16,7 +16,7 @@ public class TileController : MonoBehaviour
     void Awake()
     {
         map = GetComponentInParent<MapController>();
-        TileGen(TerrainType.Normal);
+        TileGen(TerrainType.Grass);
     }
 
     public void Setcoords(Vector2Int givenCoords)
@@ -38,7 +38,7 @@ public class TileController : MonoBehaviour
     {
         switch (type)
         {
-            case TerrainType.Normal:
+            case TerrainType.Grass:
                 moveMult = 1;
                 cover = 0;
                 walkable = true;
@@ -75,10 +75,11 @@ public class TileController : MonoBehaviour
                 sightBlock = false;
                 break;
         }
+        gameObject.name = type.ToString();
     }
     public enum TerrainType
     {
-        Normal,
+        Grass,
         Water,
         Mud,
         Bush,

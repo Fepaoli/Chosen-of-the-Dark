@@ -16,6 +16,7 @@ public class ActionController : MonoBehaviour
             GameObject newButton = Instantiate(buttonTemplate, gameObject.transform, false);
             newButton.GetComponent<ActionBtn>().LinkButton(creature,action);
             newButton.GetComponent<ActionBtn>().MoveButton(buttonPosition);
+            //Add attack dice number display
             buttonPosition += new Vector3(0, -30, 0);
         }
     }
@@ -26,6 +27,7 @@ public class ActionController : MonoBehaviour
             if (child.GetComponent<ActionBtn>() != null){
                 Destroy(child.gameObject);
             }
+            //Also hide text displaying attack dice
         }
     }
 }

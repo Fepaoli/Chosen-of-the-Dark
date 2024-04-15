@@ -12,6 +12,7 @@ public class TAction
     public StatBlock boundStats;
     public float range;
     public string actionName;
+    public string actionDescription;
     public TAction(){
         
     }

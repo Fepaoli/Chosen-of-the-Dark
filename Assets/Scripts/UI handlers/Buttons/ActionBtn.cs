@@ -19,7 +19,13 @@ public class ActionBtn : MonoBehaviour
         actor = creature;
         linkedAction = action;
         btn.onClick.AddListener(SelectButton);
-        GetComponentInChildren<TMP_Text>().text = linkedAction.actionName;
+        foreach (Transform child in gameObject.transform)
+        {
+            if (child.gameObject.name == "Action name")
+                child.gameObject.GetComponent<TMP_Text>().text = linkedAction.actionName;
+            else
+                child.gameObject.GetComponent<TMP_Text>().text = linkedAction.actionDescription;
+        }
     }
 
     public void MoveButton(Vector3 coords){

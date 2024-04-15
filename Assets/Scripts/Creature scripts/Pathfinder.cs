@@ -61,9 +61,12 @@ public class Pathfinder : MonoBehaviour
         coords = mapFunctions.WorldToGrid(gameObject.transform.position);
         map = new Dictionary<Vector2Int, TileController>();
         map = mapFunctions.map;
+        SetSpeed(gameObject.GetComponent<StatBlock>().agi + gameObject.GetComponent<StatBlock>().baseSpeed);
+    }
 
-        //placeholder
-        speed = 10;
+    public void SetSpeed(float s)
+    {
+        speed = s;
     }
 
     public void MoveTo(Vector2Int target)

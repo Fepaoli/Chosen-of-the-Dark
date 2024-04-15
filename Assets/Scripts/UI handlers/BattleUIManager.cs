@@ -70,14 +70,14 @@ public class BattleUIManager : MonoBehaviour
             else
                 stamina += "|";
         }
-        creatureStats.GetComponent<TMP_Text>().SetText("Str: " + stats.str + " Agi: " + stats.agi + " Wit: " + stats.wit + " Emp: " + stats.emp + "\nHP = " + stats.currentHP + "/" + stats.HP + " WP = " + stats.currentWP + "/" + stats.WP + " Stamina = " + stamina);
+        creatureStats.GetComponent<TMP_Text>().SetText("HP: " + stats.currentHP + "/" + stats.HP + "\nDef = " + stats.lightDef + "(L) " + stats.medDef + "(M) " + stats.heavyDef + "(H)\n Speed = " + (stats.agi + stats.baseSpeed));
         if (creature.GetComponent<StatBlock>().controlled){
             gameObject.transform.GetChild(0).GetComponent<ActionController>().ShowActions(creature);
         }
     }
 
     public void InspectTerrain(GameObject terrain){
-        //terrainName.GetComponent<TMP_Text>().SetText(terrain.name);
+        terrainName.GetComponent<TMP_Text>().SetText(terrain.name);
     }
 
     public void UpdateCreatureInspector(bool show){
