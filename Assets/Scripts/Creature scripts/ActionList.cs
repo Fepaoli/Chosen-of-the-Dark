@@ -10,6 +10,11 @@ public class LightMeleeAttack : TAction{
     int threshold;
     public LightMeleeAttack(float range, GameObject boundCreature, string actionName) : base(range, boundCreature, actionName){
     }
+
+    public override void SetDescription()
+    {
+        actionDescription = "light melee attack";
+    }
     public override void Execute(){
         creaturedice = boundStats.agi + boundStats.LWSkill;
         targetdice = targetStats.agi + targetStats.lightDef;
@@ -38,6 +43,13 @@ public class MediumMeleeAttack : TAction{
     int targetmod;
     int threshold;
     public MediumMeleeAttack(float range, GameObject boundCreature, string actionName) : base(range, boundCreature, actionName) { }
+    public override void SetDescription()
+    {
+        if (range <= 1.5)
+            actionDescription = "medium melee attack";
+        else
+            actionDescription = "medium reach attack";
+    }
     public override void Execute()
     {
         if (boundStats.agi >= boundStats.str)
@@ -71,6 +83,10 @@ public class HeavyMeleeAttack : TAction{
     int targetmod;
     int threshold;
     public HeavyMeleeAttack(float range, GameObject boundCreature, string actionName) : base(range, boundCreature, actionName) { }
+    public override void SetDescription()
+    {
+        actionDescription = "heavy melee attack";
+    }
     public override void Execute()
     {
         creaturedice = boundStats.str + boundStats.HWSkill;
@@ -101,6 +117,10 @@ public class LightRangedAttack : TAction
     int targetmod;
     int threshold;
     public LightRangedAttack(float range, GameObject boundCreature, string actionName) : base(range, boundCreature, actionName) { }
+    public override void SetDescription()
+    {
+        actionDescription = "light ranged attack";
+    }
     public override void Execute()
     {
         creaturedice = boundStats.str + boundStats.LRWSkill;
@@ -131,6 +151,10 @@ public class HeavyRangedAttack : TAction
     int targetmod;
     int threshold;
     public HeavyRangedAttack(float range, GameObject boundCreature, string actionName) : base(range, boundCreature, actionName) { }
+    public override void SetDescription()
+    {
+        actionDescription = "heavy ranged attack";
+    }
     public override void Execute()
     {
         creaturedice = boundStats.str + boundStats.HRWSkill;

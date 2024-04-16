@@ -17,13 +17,9 @@ public class OverlayController : MonoBehaviour
         colorRenderer.color = Color.clear;
     }
     public void ShowMoveState(){
-        Debug.Log("ShowState Called");
         switch (moveState){
             case TileState.Reachable:
                 colorRenderer.color = new Color(0,1.0F,0.25F,0.25F);
-                break;
-            case TileState.Threatened:
-                colorRenderer.color = new Color(1.0F,0,0,0.25F);
                 break;
             case TileState.NotReachable:
                 colorRenderer.color = Color.clear;
@@ -41,7 +37,6 @@ public class OverlayController : MonoBehaviour
     }
 
     public void ShowThreatState(){
-        Debug.Log("ShowState Called");
         switch (threatState){
             case TileState.Reachable:
                 colorRenderer.color = new Color(0,1.0F,0.25F,0.25F);

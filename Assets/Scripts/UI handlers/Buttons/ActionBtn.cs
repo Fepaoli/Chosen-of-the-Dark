@@ -35,18 +35,21 @@ public class ActionBtn : MonoBehaviour
         pressed = false;
     }
     public void SelectButton(){
-        if (pressed){
-            linkedAction.StopTargeting();
-            CursorController.Instance.targeting = false;
-            pressed = false;
-        }   
-        else{
-            if (actor.GetComponent<PlayerAction>().actionsleft>0){
-                pressed = true;
-                linkedAction.StartTargeting();
-                CursorController.Instance.targeting = true;
-                CursorController.Instance.ShowActionRange(linkedAction, actor.GetComponent<Pathfinder>());
+        if (!CursorController.Instance.acting){
+            if (pressed){
+                linkedAction.StopTargeting();
+                CursorController.Instance.targeting = false;
+                pressed = false;
+            }   
+            else{
+                if (actor.GetComponent<PlayerAction>().actionsleft>0){
+                    pressed = true;
+                    linkedAction.StartTargeting();
+                    CursorController.Instance.targeting = true;
+                    CursorController.Instance.ShowActionRange(linkedAction, actor.GetComponent<Pathfinder>());
+                }
             }
         }
+        
     }
 }

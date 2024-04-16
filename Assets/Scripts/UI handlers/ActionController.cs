@@ -9,7 +9,7 @@ public class ActionController : MonoBehaviour
     public void ShowActions(GameObject creature)
     {
         Debug.Log("Executing button creation algorithm");
-        Vector3 buttonPosition = new Vector3(0, -50, 0);
+        Vector3 buttonPosition = new Vector3(0, -30, 0);
         selectedCharacter = creature.GetComponent<StatBlock>();
         foreach (TAction action in selectedCharacter.actions){
             Debug.Log("Repeating cyle");
@@ -17,7 +17,7 @@ public class ActionController : MonoBehaviour
             newButton.GetComponent<ActionBtn>().LinkButton(creature,action);
             newButton.GetComponent<ActionBtn>().MoveButton(buttonPosition);
             //Add attack dice number display
-            buttonPosition += new Vector3(0, -30, 0);
+            buttonPosition += new Vector3(0, -60, 0);
         }
     }
 

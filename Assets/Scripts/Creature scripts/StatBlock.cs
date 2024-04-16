@@ -11,6 +11,7 @@ public class StatBlock : MonoBehaviour
     public int agi;
     public int wit;
     public int emp;
+    public GameObject creature;
     public List<Traits> traits;
     public List<TAction> actions;
 
@@ -36,6 +37,7 @@ public class StatBlock : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        creature = gameObject;
         actions = new List<TAction>();
         SecondaryCalcs();
         currentHP = HP;
@@ -50,10 +52,21 @@ public class StatBlock : MonoBehaviour
     }
 
     public void RollInitiative(){
-        Debug.Log("rolling initiative for " + gameObject);
         RolledInitiative = RollManager.Instance.RollToDC((int)agi/2+2,(int)agi/2,10);
     }
 
+    public void SpawnOnBattlefield(Vector2Int newCoords){
+        creature.GetComponent<SpriteRenderer>().enabled = true;
+        creature.GetComponent<CapsuleCollider2D>().enabled = true;
+        creature.GetComponent<Pathfinder>().coords = newCoords;
+        //MapController.Instance.map[newCoords].overlay.moveState = OverlayController.TileState.Occupied;
+        creature.GetComponent<Transform>().position = MapController.Instance.GridToWorld(newCoords);
+    }
+
+    public void Despawn (){
+        creature.GetComponent<SpriteRenderer>().enabled = false;
+        creature.GetComponent<CapsuleCollider2D>().enabled = false;
+    }
     public void SecondaryCalcs(){
         HP = 10 + 2*str;
         WP = 5 + 2*wit + 2*emp;
@@ -63,7 +76,6 @@ public class StatBlock : MonoBehaviour
     public void AddAction(TAction newAction)
     {
         actions.Add(newAction);
-        Debug.Log(actions);
     }
 
     public void RemoveAction(TAction newAction)
@@ -73,8 +85,10 @@ public class StatBlock : MonoBehaviour
 
     public void TakeDamage(int amount){
         currentHP -= amount;
-        if (currentHP<=0)
+        if (currentHP<=0){
             currentHP = 0;
+            InitiativeController.Instance.KillCreature(gameObject);
+        }
     }
 
     public void HealDamage(int amount){

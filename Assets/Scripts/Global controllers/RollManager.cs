@@ -19,21 +19,10 @@ public class RollManager : MonoBehaviour
     void Awake(){
         RMInstance = this;
     }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public int RollToDC (int dice, int bonus, int DC){
         int successes = 0;
-        for (int i = 0; i<dice ; i++){
+        for (int i = 0 ; i<dice ; i++){
             int roll = UnityEngine.Random.Range(1,21) + (bonus);
             if (roll>= DC){
                 successes += 1;
@@ -44,15 +33,21 @@ public class RollManager : MonoBehaviour
 
     public int RollContested (int dice, int bonus, int enemydice, int enemybonus, int enemythreshold){
         int successes = 0;
+        List<int> defenseResults = new List<int>();
+        for (int i = 0; i<enemydice ; i++){
+            defenseResults.Add(UnityEngine.Random.Range(1,21) + enemybonus);
+        }
+        defenseResults.Sort();
+        defenseResults.Reverse();
         for (int i = 0; i<dice ; i++){
-            int roll = UnityEngine.Random.Range(1,21) + (bonus);
-            if (enemydice > i){
-                if (roll>= UnityEngine.Random.Range(1,21) + (enemybonus)){
+            int roll = UnityEngine.Random.Range(1,21) + bonus;
+            if (i < defenseResults.Count){
+                if (roll>=defenseResults[i+1]){
                     successes += 1;
                 }
             }
             else{
-                if (roll > enemythreshold){
+                if (roll > 10-bonus){
                     successes += 1;
                 }
             }

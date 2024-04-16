@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEditor.Search;
 using UnityEngine;
@@ -26,12 +27,14 @@ public class CursorController : MonoBehaviour
     private Collider2D creaturePresent;
     public SpriteRenderer sprite;
     public Vector2Int examinedCoords;
-    private bool isCreatureSelected;
+    public bool isCreatureSelected;
     public GameObject selectedCreature;
     public bool targeting = false;
     public GameObject targeter;
     public float targetingRange;
-    public bool acting;
+    public bool acting = false;
+    public bool needToUpdateTurn = false;
+    public GameObject actor = null;
     public bool isOnUI = false;
     void Awake()
     {
@@ -41,6 +44,13 @@ public class CursorController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Update turn shower if necessary
+        if (needToUpdateTurn && !acting){
+            Debug.Log("Switching actor after action has ended");
+            needToUpdateTurn = false;
+            BattleUIManager.Instance.turnVisualizer.GetComponent<TMP_Text>().text = "Currently acting = " + actor.name;
+        }
+
         //Find if looking at tile or creature
         tilePresent = FindTile().collider;
         if (tilePresent != null)
@@ -77,26 +87,29 @@ public class CursorController : MonoBehaviour
 
             //Mouse input controller
             if (!isOnUI){
+                //Behavior when targeting with an action
                 if (targeting){
                     if (Input.GetMouseButtonDown(0)){
                         if (creaturePresent != null)
                         {
-                            Debug.Log("Getting target");
                             currentAction.GetTarget(examinedCreature);
                         }
                     }
                     else
                         if (Input.GetMouseButtonDown(1)){
-                            Debug.Log("Interrupting targeting");
                             currentAction.StopTargeting();
                             foreach(Transform btn in InitiativeController.Instance.gameObject.transform.GetChild(1)){
                                 btn.gameObject.GetComponent<ActionBtn>().ResetButton();
                             }
                         }
                 }
+
+
+                //Behavior when not targeting
                 else{
                     if (Input.GetMouseButtonDown(0))
                     {
+                        //Behavior when a character is selected on LMB
                         if (isCreatureSelected)
                         {
                             UpdateOverlays();
@@ -105,17 +118,17 @@ public class CursorController : MonoBehaviour
                                 Pathfinder creatureMove = selectedCreature.GetComponent<Pathfinder>();
                                 if (creatureMove.IsTileReachable(examinedCoords))
                                 {
-                                    acting = true;
                                     creatureMove.MoveTo(examinedCoords);
                                 }
-                                //Check if tile is reachable
-                                //If tile is not reachable, do nothing
-                                //If tile is reachable, call "move" function
                             }
                         }
+
+
+
+                        //Behavior with no character selected on LMB
                         else
                         {
-                            if (creaturePresent != null)
+                            if (creaturePresent != null && !acting)
                             {
                                 if (examinedCreature.GetComponent<StatBlock>().controlled && InitiativeController.Instance.IsActing(examinedCreature))
                                 {
@@ -128,7 +141,7 @@ public class CursorController : MonoBehaviour
                     }
                     if (Input.GetMouseButtonDown(1))
                     {
-                        //show stats in depth
+                        //Behavior when a character is selected on RMB
                         if (isCreatureSelected)
                         {
                             if (creaturePresent == null)
@@ -141,6 +154,9 @@ public class CursorController : MonoBehaviour
                                 BattleUIManager.Instance.InspectCreature(examinedCreature);
                             }
                         }
+
+
+                        //Behavior with no character selected on RMB
                         else
                         {
                             if (creaturePresent != null)
@@ -174,8 +190,23 @@ public class CursorController : MonoBehaviour
         }
     }
 
+    public void SwitchActingCharacter(GameObject character){
+        if (!acting){
+            Debug.Log("Directly changed actor");
+            BattleUIManager.Instance.turnVisualizer.GetComponent<TMP_Text>().text = "Currently acting = " + character.name;
+        }
+        else{
+            Debug.Log("Waiting to change actor");
+            needToUpdateTurn = true;
+            actor = character;
+        }
+    }
+
     public void Deselect(){
         isCreatureSelected = false;
+        foreach (KeyValuePair<Vector2Int, TileController> x in MapController.Instance.map){
+            x.Value.overlay.Hide();
+        }
         if (selectedCreature != null){
             selectedCreature.GetComponent<Pathfinder>().Deselect();
             selectedCreature = null;
@@ -204,7 +235,6 @@ public class CursorController : MonoBehaviour
     }
     
     public void UpdateOverlays(){
-        Debug.Log("UpdateOverlays Called");
         selectedCreature.GetComponent<Pathfinder>().UpdateMoveMap();
     }
 }

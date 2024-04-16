@@ -26,6 +26,7 @@ public class BattleUIManager : MonoBehaviour
     public GameObject terrainName;
     public GameObject terrainStats;
     public GameObject terrainInspector;
+    public GameObject turnVisualizer;
     // public ActionController buttons;
     // Start is called before the first frame update
     void Start()

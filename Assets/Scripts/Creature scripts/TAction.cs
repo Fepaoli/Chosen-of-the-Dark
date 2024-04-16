@@ -14,16 +14,18 @@ public class TAction
     public string actionName;
     public string actionDescription;
     public TAction(){
-        
+        SetDescription();
     }
     public TAction(float attRange){
         range = attRange;
+        SetDescription();
     }
 
     public TAction(float attRange, GameObject attActor){
         range = attRange;
         boundCreature = attActor;
         boundStats = attActor.GetComponent<StatBlock>();
+        SetDescription();
     }
 
     public TAction(float attRange, GameObject attActor, string name)
@@ -32,6 +34,7 @@ public class TAction
         boundCreature = attActor;
         boundStats = attActor.GetComponent<StatBlock>();
         actionName = name;
+        SetDescription();
     }
     public virtual void StartTargeting(){
         Debug.Log("Start targeting");
@@ -44,6 +47,10 @@ public class TAction
         CursorController.Instance.currentAction = null;
         CursorController.Instance.HideActionRange();
         boundCreature.GetComponent<Pathfinder>().UpdateMoveMap();
+    }
+
+    public virtual void SetDescription(){
+        actionDescription = "Placeholder";
     }
     public virtual void GetTarget(GameObject target){
         if (target != boundCreature){

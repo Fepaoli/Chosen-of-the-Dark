@@ -75,7 +75,6 @@ public class AutoAction : MonoBehaviour
         {
             if (pathfinder.IsTileReachable(x))
             {
-                Debug.Log("Evaluating tile " + x + " Value = " + CellValues[x].totalValue);
                 if (CellValues[x].totalValue >= maxvalue)
                 {
                     if (CellValues[x].totalValue > maxvalue || MapController.Instance.calcLOSDistance(x,pathfinder.coords) < MapController.Instance.calcLOSDistance(maxValueCell, pathfinder.coords))
@@ -105,26 +104,28 @@ public class AutoAction : MonoBehaviour
             // Adding for each target
             foreach (Transform child in InitiativeController.Instance.gameObject.transform.GetChild(1))
             {
-                Pathfinder enemyDistance = child.GetComponent<Pathfinder>();
-                foreach (Vector2Int x in CellValues.Keys)
-                {
-                    if (pathfinder.IsTileReachable(x))
+                if (InitiativeController.Instance.InitiativeOrder.Contains(child.gameObject)){
+                    Pathfinder enemyDistance = child.GetComponent<Pathfinder>();
+                    foreach (Vector2Int x in CellValues.Keys)
                     {
-                        if (MapController.Instance.calcLOSDistance(x, enemyDistance.coords) <= checkedAction.range)
+                        if (pathfinder.IsTileReachable(x))
                         {
-                            CellValues[x].offensiveValues.Add(1.2F);
-                            if (!EnemiesInRange.ContainsKey(x)){
-                                EnemiesInRange.Add(x, child.gameObject);
+                            if (MapController.Instance.calcLOSDistance(x, enemyDistance.coords) <= checkedAction.range)
+                            {
+                                CellValues[x].offensiveValues.Add(1.2F);
+                                if (!EnemiesInRange.ContainsKey(x)){
+                                    EnemiesInRange.Add(x, child.gameObject);
+                                }
+                            }
+                            else
+                            {
+                                float distance = MapController.Instance.calcLOSDistance(x, enemyDistance.coords);
+                                CellValues[x].offensiveValues.Add((distance - (distance - checkedAction.range)) / distance);
                             }
                         }
-                        else
-                        {
-                            float distance = MapController.Instance.calcLOSDistance(x, enemyDistance.coords);
-                            CellValues[x].offensiveValues.Add((distance - (distance - checkedAction.range)) / distance);
-                        }
                     }
+                    actionNumber++;
                 }
-                actionNumber++;
             }
         }
         //Calculate defensive value

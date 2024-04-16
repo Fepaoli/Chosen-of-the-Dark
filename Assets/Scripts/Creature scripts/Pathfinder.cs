@@ -78,6 +78,7 @@ public class Pathfinder : MonoBehaviour
             pathCoords.Add(mapFunctions.GridToWorld(target));
             target = pathfindingMap[target].previous;
         }
+        CursorController.Instance.acting = true;
         pathCoords.Reverse();
     }
 
