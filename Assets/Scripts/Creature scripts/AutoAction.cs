@@ -13,6 +13,10 @@ public class AutoAction : MonoBehaviour
     public List<TAction> ActionList;
     public Dictionary<Vector2Int, EvaluatedCell> CellValues;
     public Dictionary<Vector2Int, GameObject> EnemiesInRange;
+    GameObject chosenTarget = null;
+    public bool executingturn;
+    public bool waitingforattack;
+    public bool acting;
 
     void Start()
     {
@@ -21,6 +25,18 @@ public class AutoAction : MonoBehaviour
         attack = new LightMeleeAttack(1.5F, gameObject, "bite");
         ActionList.Add(attack);
         pathfinder = gameObject.GetComponent<Pathfinder>();
+    }
+
+    private void Update()
+    {
+        if (!acting && executingturn) {
+            if (waitingforattack)
+            {
+                Attack(chosenTarget);
+            }
+            executingturn = false;
+            InitiativeController.Instance.NextInInitiative();
+        }
     }
 
     public void InitTargetingMap()
@@ -32,6 +48,8 @@ public class AutoAction : MonoBehaviour
     }
 
     public void TakeTurn(){
+        executingturn=true;
+        acting = true;
         actionsleft = 1;
         pathfinder.moveLeft = pathfinder.speed;
         pathfinder.CreatePathfindingMap();
@@ -44,7 +62,6 @@ public class AutoAction : MonoBehaviour
         //If there are reachable enemies, choose one to attack
         if (EnemiesInRange.Any()){
             float minDist = 300;
-            GameObject chosenTarget = null;
             Vector2Int chosenCoords = pathfinder.coords;
             foreach(Vector2Int attackingCoords in EnemiesInRange.Keys){
                 if (pathfinder.pathfindingMap[attackingCoords].distance < minDist){
@@ -54,11 +71,14 @@ public class AutoAction : MonoBehaviour
                 }
             }
             pathfinder.MoveTo(chosenCoords);
-            Attack (chosenTarget);
+            waitingforattack = true;
         }
         //If there are none, move to the best value cell and wait
         else
+        {
             ValueBasedMove();
+            waitingforattack = false;
+        }
     }
 
     public void Attack (GameObject target){

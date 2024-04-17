@@ -101,7 +101,7 @@ MonoBehaviour:
   terrain: 0
   moveMult: 0
   cover: 0
-  walkable: 0
+  walkable: 1
   sightBlock: 0
   coords: {x: 0, y: 0}
   overlay: {fileID: 0}

@@ -1,11 +1,8 @@
 using System.Collections;
 using System;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
-using UnityEditor.Experimental.GraphView;
 using System.Linq;
 using TMPro;
 
@@ -40,15 +37,14 @@ public class InitiativeController : MonoBehaviour
     {
         parent = gameObject.transform;
         actorIndex = 0;
-        StateManager.Instance.OnBattleStart.AddListener(RollInitiative);
         StateManager.Instance.OnRoundStart.AddListener(NextInInitiative);
     }
-    void SpawnPlayerCharacters(){
-        Vector2Int coords = new Vector2Int(15,2);
+    public void SpawnPlayerCharacters(){
+        Vector2Int coords = new Vector2Int(10,2);
         foreach (Transform child in parent.GetChild(1)){
             //Determine player character spawn coordinates
             coords[0] +=1;
-            //Actually spawn player character
+            //Actually spawn player characterw
             child.gameObject.SetActive(true);
             child.gameObject.GetComponent<StatBlock>().SpawnOnBattlefield(coords);
             string name = child.gameObject.name;
@@ -67,13 +63,13 @@ public class InitiativeController : MonoBehaviour
             else if (name == "Hero")
             {
                 child.gameObject.GetComponent<StatBlock>().AddAction(new MediumMeleeAttack(1.5F, child.gameObject,"Warhammer"));
-                child.gameObject.GetComponent<StatBlock>().AddAction(new HeavyRangedAttack(1.5F, child.gameObject,"Longbow"));
+                child.gameObject.GetComponent<StatBlock>().AddAction(new HeavyRangedAttack(10F, child.gameObject,"Longbow"));
             }
 
         }
     }
 
-    void SpawnEnemies(){
+    public void SpawnEnemies(){
         //Determine base spawn position for enemies
         Vector2Int coords = new Vector2Int(15,25);
 
@@ -83,6 +79,37 @@ public class InitiativeController : MonoBehaviour
         //Instantiate enemies
         foreach (Transform child in parent.GetChild(0)){
             child.gameObject.SetActive(true);
+            string name = child.gameObject.name;
+            //Placeholder to give enemies their actions and their position
+            if (name == "Thief")
+            {
+                child.gameObject.GetComponent<AutoAction>().attack = new LightMeleeAttack(1.5F, child.gameObject, "Dagger");
+                child.gameObject.GetComponent<StatBlock>().SpawnOnBattlefield(coords + new Vector2Int(-3, -5));
+            }
+            else if (name == "Thief (1)")
+            {
+                child.gameObject.GetComponent<AutoAction>().attack = new LightMeleeAttack(1.5F, child.gameObject, "Dagger");
+                child.gameObject.GetComponent<StatBlock>().SpawnOnBattlefield(coords + new Vector2Int(-7, -5));
+            }
+            else if (name == "Thief (2)")
+            {
+                child.gameObject.GetComponent<AutoAction>().attack = new LightMeleeAttack(1.5F, child.gameObject, "Dagger");
+                child.gameObject.GetComponent<StatBlock>().SpawnOnBattlefield(coords + new Vector2Int(-5, -7));
+            }
+            else if (name == "Beastmaster")
+            {
+                child.gameObject.GetComponent<AutoAction>().attack = new HeavyRangedAttack(7.5F, child.gameObject, "Crossbow");
+                child.gameObject.GetComponent<StatBlock>().SpawnOnBattlefield(coords + new Vector2Int(+10, 0));
+            }
+            else if (name == "Brigand")
+            {
+                child.gameObject.GetComponent<AutoAction>().attack = new HeavyMeleeAttack(1.5F, child.gameObject, "Maul");
+                child.gameObject.GetComponent<StatBlock>().SpawnOnBattlefield(coords + new Vector2Int(-5, -5));
+            }
+            else
+            {
+                child.gameObject.GetComponent<StatBlock>().SpawnOnBattlefield(coords + new Vector2Int(+11, -2));
+            }
         }
     }
 
@@ -97,9 +124,7 @@ public class InitiativeController : MonoBehaviour
         }
         return false;
     }
-    void RollInitiative(){
-        SpawnEnemies();
-        SpawnPlayerCharacters();
+    public void RollInitiative(){
         // Get enemies
         foreach (Transform child in parent.GetChild(0)){
             InitiativeOrder.Add(child.gameObject);
@@ -181,7 +206,6 @@ public class InitiativeController : MonoBehaviour
                 actorIndex = 0;
                 StateManager.Instance.UpdateState(StateList.newround);
             }
-            bool auto = false;
             currentActor = InitiativeOrder[actorIndex];
             CursorController.Instance.SwitchActingCharacter(currentActor);
             if (currentActor.GetComponent<StatBlock>().controlled)
@@ -193,13 +217,8 @@ public class InitiativeController : MonoBehaviour
             {
                 StateManager.Instance.UpdateState(StateList.evilTurn);
                 currentActor.GetComponent<AutoAction>().TakeTurn();
-                auto = true;
             }
             actorIndex++;
-            if (auto)
-            {
-                NextInInitiative();
-            }
         }
     }
     public void SetupPathfinding()

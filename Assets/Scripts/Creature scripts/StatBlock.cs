@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.MPE;
 using UnityEngine;
 
 public class StatBlock : MonoBehaviour
@@ -68,7 +67,7 @@ public class StatBlock : MonoBehaviour
         creature.GetComponent<CapsuleCollider2D>().enabled = false;
     }
     public void SecondaryCalcs(){
-        HP = 10 + 2*str;
+        HP = 8 + 2*str;
         WP = 5 + 2*wit + 2*emp;
         stamina = baseStam + (int)Math.Truncate(str/4D) + (int)Math.Truncate(agi/4D);
     }

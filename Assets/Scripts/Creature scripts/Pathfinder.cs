@@ -23,7 +23,6 @@ public class Pathfinder : MonoBehaviour
     public float speed;
     void Start()
     {
-        StateManager.Instance.OnBattleStart.AddListener(InitMap);
         pathCoords = new List<Vector3>();
         gameObject.SetActive(false);
     }
@@ -53,6 +52,8 @@ public class Pathfinder : MonoBehaviour
                 DefinePaths(coords, moveLeft);
                 if (gameObject.GetComponent<StatBlock>().controlled)
                     UpdateMoveMap();
+                else
+                    gameObject.GetComponent<AutoAction>().acting = false;
             }
         }
     }
@@ -125,27 +126,37 @@ public class Pathfinder : MonoBehaviour
                     else
                         map[u.coords].overlay.moveState = OverlayController.TileState.Blocked;
                 }
-                List<PathfindingGrid> neighbours = FindNeighbours(u.coords);
-                for (int i = 0; i < neighbours.Count(); i++)
+                if ((InitiativeController.Instance.IsOccupied(u.coords) || !mapFunctions.map[u.coords].walkable) && u.coords != startingcell.coords)
                 {
-                    if (Q.Contains(neighbours[i]))
+                    pathfindingMap[u.coords] = new PathfindingGrid(pathfindingMap[u.coords].coords, pathfindingMap[u.coords].distance, pathfindingMap[u.coords].previous, false);
+                }
+                else
+                {
+                    List<PathfindingGrid> neighbours = FindNeighbours(u.coords);
+                    for (int i = 0; i < neighbours.Count(); i++)
                     {
-                        float altDist;
-                        bool diagonal = false;
-                        if ((neighbours[i].coords[0] + neighbours[i].coords[1] - u.coords[0] - u.coords[1]) % 2 == 0){
-                            diagonal = true;                        
-                        }
-                        if (diagonal){
-                            altDist = u.distance + (map[neighbours[i].coords].moveMult * (float)Math.Sqrt(2));
-                        }
-                        else{
-                            altDist = u.distance + map[neighbours[i].coords].moveMult;
-                        }
-                        if (altDist < neighbours[i].distance)
+                        if (Q.Contains(neighbours[i]))
                         {
-                            pathfindingMap[neighbours[i].coords] = new PathfindingGrid(neighbours[i].coords, altDist, u.coords);
-                            Q.Remove(Q.Find(toupdate => toupdate.coords == neighbours[i].coords));
-                            Q.Add(new PathfindingGrid(neighbours[i].coords, altDist, u.coords));
+                            float altDist;
+                            bool diagonal = false;
+                            if ((neighbours[i].coords[0] + neighbours[i].coords[1] - u.coords[0] - u.coords[1]) % 2 == 0)
+                            {
+                                diagonal = true;
+                            }
+                            if (diagonal)
+                            {
+                                altDist = u.distance + (map[neighbours[i].coords].moveMult * (float)Math.Sqrt(2));
+                            }
+                            else
+                            {
+                                altDist = u.distance + map[neighbours[i].coords].moveMult;
+                            }
+                            if (altDist < neighbours[i].distance)
+                            {
+                                pathfindingMap[neighbours[i].coords] = new PathfindingGrid(neighbours[i].coords, altDist, u.coords);
+                                Q.Remove(Q.Find(toupdate => toupdate.coords == neighbours[i].coords));
+                                Q.Add(new PathfindingGrid(neighbours[i].coords, altDist, u.coords));
+                            }
                         }
                     }
                 }
@@ -160,14 +171,14 @@ public class Pathfinder : MonoBehaviour
     public List<PathfindingGrid> FindNeighbours (Vector2Int position)
     {
         List<PathfindingGrid> neighbours = new List<PathfindingGrid>();
-        if (pathfindingMap.ContainsKey(position + new Vector2Int(1, 0))) { neighbours.Add(pathfindingMap[position + new Vector2Int(1,0)]); }
-        if (pathfindingMap.ContainsKey(position + new Vector2Int(-1, 0))) { neighbours.Add(pathfindingMap[position + new Vector2Int(-1, 0)]); }
-        if (pathfindingMap.ContainsKey(position + new Vector2Int(0, 1))) { neighbours.Add(pathfindingMap[position + new Vector2Int(0, 1)]); }
-        if (pathfindingMap.ContainsKey(position + new Vector2Int(0, -1))) { neighbours.Add(pathfindingMap[position + new Vector2Int(0, -1)]); }
-        if (pathfindingMap.ContainsKey(position + new Vector2Int(1, 1))) { neighbours.Add(pathfindingMap[position + new Vector2Int(1, 1)]); }
-        if (pathfindingMap.ContainsKey(position + new Vector2Int(-1, 1))) { neighbours.Add(pathfindingMap[position + new Vector2Int(-1, 1)]); }
-        if (pathfindingMap.ContainsKey(position + new Vector2Int(1, -1))) { neighbours.Add(pathfindingMap[position + new Vector2Int(1, -1)]); }
-        if (pathfindingMap.ContainsKey(position + new Vector2Int(-1, -1))) { neighbours.Add(pathfindingMap[position + new Vector2Int(-1, -1)]); }
+        if (pathfindingMap.ContainsKey(position + new Vector2Int(1, 0))) if (pathfindingMap[position + new Vector2Int(1, 0)].walkable) { neighbours.Add(pathfindingMap[position + new Vector2Int(1,0)]); }
+        if (pathfindingMap.ContainsKey(position + new Vector2Int(-1, 0))) if (pathfindingMap[position + new Vector2Int(-1, 0)].walkable) { neighbours.Add(pathfindingMap[position + new Vector2Int(-1, 0)]); }
+        if (pathfindingMap.ContainsKey(position + new Vector2Int(0, 1))) if (pathfindingMap[position + new Vector2Int(0, 1)].walkable) { neighbours.Add(pathfindingMap[position + new Vector2Int(0, 1)]); }
+        if (pathfindingMap.ContainsKey(position + new Vector2Int(0, -1))) if (pathfindingMap[position + new Vector2Int(0, -1)].walkable) { neighbours.Add(pathfindingMap[position + new Vector2Int(0, -1)]); }
+        if (pathfindingMap.ContainsKey(position + new Vector2Int(1, 1))) if (pathfindingMap[position + new Vector2Int(1, 1)].walkable) { neighbours.Add(pathfindingMap[position + new Vector2Int(1, 1)]); }
+        if (pathfindingMap.ContainsKey(position + new Vector2Int(-1, 1))) if (pathfindingMap[position + new Vector2Int(-1, 1)].walkable) { neighbours.Add(pathfindingMap[position + new Vector2Int(-1, 1)]); }
+        if (pathfindingMap.ContainsKey(position + new Vector2Int(1, -1))) if (pathfindingMap[position + new Vector2Int(1, -1)].walkable) { neighbours.Add(pathfindingMap[position + new Vector2Int(1, -1)]); }
+        if (pathfindingMap.ContainsKey(position + new Vector2Int(-1, -1))) if (pathfindingMap[position + new Vector2Int(-1, -1)].walkable) { neighbours.Add(pathfindingMap[position + new Vector2Int(-1, -1)]); }
         return neighbours;
     }
 

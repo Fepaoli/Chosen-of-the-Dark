@@ -38,6 +38,12 @@ public class MapController : MonoBehaviour
     public void MapSetup(){
         map = new Dictionary<Vector2Int, TileController>();
         Generate();
+        InitiativeController.Instance.ClearInitiative();
+        InitiativeController.Instance.SpawnEnemies();
+        InitiativeController.Instance.SpawnPlayerCharacters();
+        InitiativeController.Instance.RollInitiative();
+        InitiativeController.Instance.SetupPathfinding();
+        StateManager.Instance.UpdateState(StateList.newround);
     }
 
     public void Generate()
@@ -64,8 +70,6 @@ public class MapController : MonoBehaviour
                 map.Add(coords, createdController);
             }
         }
-        InitiativeController.Instance.SetupPathfinding();
-        StateManager.Instance.UpdateState(StateList.newround);
     }
 
     public float calcLOSDistance(Vector2Int startingCell, Vector2Int targetCell)

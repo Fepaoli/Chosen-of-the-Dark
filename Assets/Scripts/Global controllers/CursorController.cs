@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
-using UnityEditor.Search;
 using UnityEngine;
 
 public class CursorController : MonoBehaviour
@@ -96,12 +95,8 @@ public class CursorController : MonoBehaviour
                         }
                     }
                     else
-                        if (Input.GetMouseButtonDown(1)){
+                        if (Input.GetMouseButtonDown(1))
                             currentAction.StopTargeting();
-                            foreach(Transform btn in InitiativeController.Instance.gameObject.transform.GetChild(1)){
-                                btn.gameObject.GetComponent<ActionBtn>().ResetButton();
-                            }
-                        }
                 }
 
 
@@ -139,34 +134,36 @@ public class CursorController : MonoBehaviour
                             }
                         }
                     }
-                    if (Input.GetMouseButtonDown(1))
-                    {
-                        //Behavior when a character is selected on RMB
-                        if (isCreatureSelected)
-                        {
-                            if (creaturePresent == null)
-                            {
-                                BattleUIManager.Instance.DeselectCreature();
-                                Deselect();
-                            }
-                            else
-                            {
-                                BattleUIManager.Instance.InspectCreature(examinedCreature);
-                            }
-                        }
+                }
+            }
+        }
+        //Inspect behavior
+        if (Input.GetMouseButtonDown(1))
+        {
+            //Behavior when a character is selected on RMB
+            if (isCreatureSelected)
+            {
+                if (creaturePresent == null)
+                {
+                    BattleUIManager.Instance.DeselectCreature();
+                    Deselect();
+                }
+                else
+                {
+                    BattleUIManager.Instance.InspectCreature(examinedCreature);
+                }
+            }
 
 
-                        //Behavior with no character selected on RMB
-                        else
-                        {
-                            if (creaturePresent != null)
-                                BattleUIManager.Instance.InspectCreature(examinedCreature);
-                            else{
-                                BattleUIManager.Instance.DeselectCreature();
-                                Deselect();
-                            }
-                        }
-                    }
+            //Behavior with no character selected on RMB
+            else
+            {
+                if (creaturePresent != null)
+                    BattleUIManager.Instance.InspectCreature(examinedCreature);
+                else
+                {
+                    BattleUIManager.Instance.DeselectCreature();
+                    Deselect();
                 }
             }
         }

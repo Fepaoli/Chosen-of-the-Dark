@@ -118,7 +118,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controlled: 0
-  str: 4
+  str: 3
   agi: 5
   wit: 1
   emp: 3

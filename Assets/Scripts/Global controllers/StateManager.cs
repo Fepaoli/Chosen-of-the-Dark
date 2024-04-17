@@ -47,6 +47,10 @@ public class StateManager : MonoBehaviour
     }
 
     void Update(){
+        if (Input.GetKeyDown(KeyCode.Escape))
+            Application.Quit();
+        if (Input.GetKeyDown(KeyCode.Return))
+            stateType = StateList.battleStart;
         if (stateType != currentState.GetType()){
             currentState.ExitState();
             switch(stateType){
