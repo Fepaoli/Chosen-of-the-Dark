@@ -85,6 +85,18 @@ public class InitiativeController : MonoBehaviour
             child.gameObject.SetActive(true);
         }
     }
+
+    public bool IsOccupied(Vector2Int coords)
+    {
+        foreach (GameObject creature in InitiativeOrder)
+        {
+            if (creature.gameObject.GetComponent<Pathfinder>().coords == coords) {
+                Debug.Log("A creature is present at " + coords);
+                return true;
+            }
+        }
+        return false;
+    }
     void RollInitiative(){
         SpawnEnemies();
         SpawnPlayerCharacters();

@@ -84,7 +84,7 @@ public class Pathfinder : MonoBehaviour
 
     public bool IsTileReachable(Vector2Int coords)
     {
-        return (pathfindingMap[coords].distance <= moveLeft);
+        return (pathfindingMap[coords].distance <= moveLeft && pathfindingMap[coords].walkable);
     }
 
     public void CreatePathfindingMap()
@@ -93,7 +93,7 @@ public class Pathfinder : MonoBehaviour
         map = mapFunctions.map;
         foreach (TileController x in map.Values)
         {
-            pathfindingMap.Add(x.coords, new PathfindingGrid(x.coords, 300, x.coords));
+            pathfindingMap.Add(x.coords, new PathfindingGrid(x.coords, 300, x.coords, x.walkable));
         }
     }
     public void DefinePaths(Vector2Int position, float movespeed)
@@ -118,7 +118,12 @@ public class Pathfinder : MonoBehaviour
             if (u.distance <= moveLeft){
                 if (playerControlled)
                 {
-                    map[u.coords].overlay.moveState = OverlayController.TileState.Reachable;
+                    if (InitiativeController.Instance.IsOccupied(u.coords))
+                        map[u.coords].overlay.moveState = OverlayController.TileState.Occupied;
+                    else if (map[u.coords].walkable)
+                        map[u.coords].overlay.moveState = OverlayController.TileState.Reachable;
+                    else
+                        map[u.coords].overlay.moveState = OverlayController.TileState.Blocked;
                 }
                 List<PathfindingGrid> neighbours = FindNeighbours(u.coords);
                 for (int i = 0; i < neighbours.Count(); i++)
@@ -181,10 +186,18 @@ public class Pathfinder : MonoBehaviour
     {
         public Vector2Int coords;
         public float distance;
+        public bool walkable;
         public Vector2Int previous;
-
         public PathfindingGrid(Vector2Int c, float dist, Vector2Int prevCoords)
         {
+            walkable = true;
+            coords = c;
+            distance = dist;
+            previous = prevCoords;
+        }
+        public PathfindingGrid(Vector2Int c, float dist, Vector2Int prevCoords, bool w)
+        {
+            walkable = w;
             coords = c;
             distance = dist;
             previous = prevCoords;

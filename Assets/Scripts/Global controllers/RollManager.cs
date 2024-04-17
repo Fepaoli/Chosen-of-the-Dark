@@ -23,7 +23,7 @@ public class RollManager : MonoBehaviour
     public int RollToDC (int dice, int bonus, int DC){
         int successes = 0;
         for (int i = 0 ; i<dice ; i++){
-            int roll = UnityEngine.Random.Range(1,21) + (bonus);
+            int roll = Random.Range(1,21) + (bonus);
             if (roll>= DC){
                 successes += 1;
             }
@@ -35,18 +35,23 @@ public class RollManager : MonoBehaviour
         int successes = 0;
         List<int> defenseResults = new List<int>();
         for (int i = 0; i<enemydice ; i++){
-            defenseResults.Add(UnityEngine.Random.Range(1,21) + enemybonus);
+            defenseResults.Add(Random.Range(1,21) + enemybonus);
         }
+        Debug.Log("number of defence die = " + defenseResults.Count);
         defenseResults.Sort();
         defenseResults.Reverse();
+        Debug.Log("number of dice to roll = " + dice);
         for (int i = 0; i<dice ; i++){
-            int roll = UnityEngine.Random.Range(1,21) + bonus;
+            Debug.Log(i);
+            int roll = Random.Range(1,21) + bonus;
             if (i < defenseResults.Count){
-                if (roll>=defenseResults[i+1]){
+                Debug.Log("Rolling against defence");
+                if (roll>=defenseResults[i]){
                     successes += 1;
                 }
             }
             else{
+                Debug.Log("Rolling against base DC");
                 if (roll > 10-bonus){
                     successes += 1;
                 }
