@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 15
-  m_Sprite: {fileID: 21300000, guid: ae8acd43e33dfef4ea6aa9baed9561ae, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 59d8bf0ece25b214ca8086146c9b670e, type: 3}
   m_Color: {r: 0.1562413, g: 1, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -102,6 +102,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapFunctions: {fileID: 0}
   coords: {x: 0, y: 0}
+  moving: 0
   moveLeft: 0
   speed: 0
 --- !u!114 &408157680450296760
@@ -121,6 +122,7 @@ MonoBehaviour:
   agi: 5
   wit: 1
   emp: 3
+  creature: {fileID: 0}
   traits: 
   LWSkill: 4
   MWSkill: 0
@@ -130,9 +132,9 @@ MonoBehaviour:
   DMSkill: 0
   OMSkill: 0
   lightDef: 2
-  medDef: 2
-  heavyDef: 2
-  baseSpeed: 4
+  medDef: 1
+  heavyDef: 0
+  baseSpeed: 2
   HP: 0
   currentHP: 0
   WP: 0
@@ -188,3 +190,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29fb7059d29fa0446929d6409774b0d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  actionsleft: 0
+  pathfinder: {fileID: 0}
+  PartyMembers: []
