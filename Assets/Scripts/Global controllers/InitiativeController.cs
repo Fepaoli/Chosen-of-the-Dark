@@ -118,7 +118,6 @@ public class InitiativeController : MonoBehaviour
         foreach (GameObject creature in InitiativeOrder)
         {
             if (creature.gameObject.GetComponent<Pathfinder>().coords == coords) {
-                Debug.Log("A creature is present at " + coords);
                 return true;
             }
         }
@@ -201,7 +200,7 @@ public class InitiativeController : MonoBehaviour
     {
         CursorController.Instance.Deselect();
         if (InitiativeOrder.Any()){
-            if (actorIndex == InitiativeOrder.Count)
+            if (actorIndex >= InitiativeOrder.Count)
             {
                 actorIndex = 0;
                 StateManager.Instance.UpdateState(StateList.newround);
