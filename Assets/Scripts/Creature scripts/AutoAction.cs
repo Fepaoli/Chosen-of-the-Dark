@@ -97,7 +97,7 @@ public class AutoAction : MonoBehaviour
             {
                 if (CellValues[x].totalValue >= maxvalue)
                 {
-                    if (CellValues[x].totalValue > maxvalue || MapController.Instance.calcLOSDistance(x,pathfinder.coords) < MapController.Instance.calcLOSDistance(maxValueCell, pathfinder.coords))
+                    if (CellValues[x].totalValue > maxvalue || MapController.Instance.calcDistance(x,pathfinder.coords) < MapController.Instance.calcDistance(maxValueCell, pathfinder.coords))
                     {
                         maxvalue = CellValues[x].totalValue;
                         maxValueCell = x;
@@ -130,7 +130,7 @@ public class AutoAction : MonoBehaviour
                     {
                         if (pathfinder.IsTileReachable(x))
                         {
-                            if (MapController.Instance.calcLOSDistance(x, enemyDistance.coords) <= checkedAction.range)
+                            if (MapController.Instance.calcDistance(x, enemyDistance.coords) <= checkedAction.range)
                             {
                                 CellValues[x].offensiveValues.Add(1.2F);
                                 if (!EnemiesInRange.ContainsKey(x)){
@@ -139,7 +139,7 @@ public class AutoAction : MonoBehaviour
                             }
                             else
                             {
-                                float distance = MapController.Instance.calcLOSDistance(x, enemyDistance.coords);
+                                float distance = MapController.Instance.calcDistance(x, enemyDistance.coords);
                                 CellValues[x].offensiveValues.Add((distance - (distance - checkedAction.range)) / distance);
                             }
                         }
@@ -161,7 +161,7 @@ public class AutoAction : MonoBehaviour
                 {
                     if (pathfinder.IsTileReachable(x))
                     {
-                        float distance = MapController.Instance.calcLOSDistance(x, enemyDistance.coords);
+                        float distance = MapController.Instance.calcDistance(x, enemyDistance.coords);
                         if (distance > enemyRange && distance <= maxCalcedRange)
                             CellValues[x].defensiveValues.Add(((maxCalcedRange - enemyRange) - (maxCalcedRange - distance)) / (maxCalcedRange - enemyRange));
                         else if (distance > maxCalcedRange)

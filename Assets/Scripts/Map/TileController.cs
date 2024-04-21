@@ -16,7 +16,8 @@ public class TileController : MonoBehaviour
     void Awake()
     {
         map = GetComponentInParent<MapController>();
-        TileGen(TerrainType.Grass);
+        terrain = TerrainType.Grass;
+        TileGen();
     }
 
     public void Setcoords(Vector2Int givenCoords)
@@ -34,9 +35,9 @@ public class TileController : MonoBehaviour
         gameObject.GetComponent<SpriteRenderer>().color = Color.clear;
     }
 
-    public void TileGen(TerrainType type)
+    public void TileGen()
     {
-        switch (type)
+        switch (terrain)
         {
             case TerrainType.Grass:
                 moveMult = 1;
@@ -44,10 +45,17 @@ public class TileController : MonoBehaviour
                 walkable = true;
                 sightBlock = false;
                 break;
-            case TerrainType.Water:
+            case TerrainType.ShallowWater:
                 moveMult = 2;
                 cover = 0;
                 walkable = true;
+                sightBlock = false;
+                break;
+            case TerrainType.DeepWater:
+                moveMult = 2;
+                gameObject.GetComponent<SpriteRenderer>().color = Color.blue;
+                cover = 0;
+                walkable = false;
                 sightBlock = false;
                 break;
             case TerrainType.Mud:
@@ -75,12 +83,13 @@ public class TileController : MonoBehaviour
                 sightBlock = false;
                 break;
         }
-        gameObject.name = type.ToString();
+        gameObject.name = terrain.ToString();
     }
     public enum TerrainType
     {
         Grass,
-        Water,
+        ShallowWater,
+        DeepWater,
         Mud,
         Bush,
         Blocker,
