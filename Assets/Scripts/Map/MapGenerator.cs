@@ -176,12 +176,35 @@ public class MapGenerator : MonoBehaviour
                 connectionComplete = true;
             }
         }
-
+        //Randomly determine the stream's width
+        //float width = Random.Range(2,9)/2;
+        float width = 3F;
         // now that the main flow is present, determine stream width and mark all other cells
+        List <Vector2Int> secondaryFlow = new List<Vector2Int>();
+        foreach (Vector2Int tile in MapController.Instance.map.Keys)
+        {
+            foreach (Vector2Int cell in flow)
+            {
+                if (MapController.Instance.calcDistance(cell,tile) <= width)
+                {
+                    if (!secondaryFlow.Contains(tile))
+                        secondaryFlow.Add(tile);
+                }
+            }
+        }
         // final step: set appearance of all cells between flow and overflow to "DeepWater"
         foreach (Vector2Int cell in flow)
         {
             if (cell[0] > 0 && cell[1] > 0 && cell[0] <31 && cell[1] < 31)
+            {
+                MapController.Instance.map[cell].terrain = TileController.TerrainType.DeepWater;
+                MapController.Instance.map[cell].TileGen();
+            }
+        }
+
+        foreach (Vector2Int cell in secondaryFlow)
+        {
+            if (cell[0] > 0 && cell[1] > 0 && cell[0] < 31 && cell[1] < 31)
             {
                 MapController.Instance.map[cell].terrain = TileController.TerrainType.DeepWater;
                 MapController.Instance.map[cell].TileGen();
