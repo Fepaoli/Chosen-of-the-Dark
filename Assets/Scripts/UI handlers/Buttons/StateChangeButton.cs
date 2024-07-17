@@ -19,6 +19,5 @@ public class StateChangeButton : MonoBehaviour
     void SwitchState()
     {
         StateManager.Instance.UpdateState(tiedState);
-
     }
 }

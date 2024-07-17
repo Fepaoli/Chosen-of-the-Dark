@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
@@ -177,8 +176,7 @@ public class MapGenerator : MonoBehaviour
             }
         }
         //Randomly determine the stream's width
-        //float width = Random.Range(2,9)/2;
-        float width = 3F;
+        float width = Random.Range(3,6)/2;
         // now that the main flow is present, determine stream width and mark all other cells
         List <Vector2Int> secondaryFlow = new List<Vector2Int>();
         foreach (Vector2Int tile in MapController.Instance.map.Keys)
@@ -192,12 +190,12 @@ public class MapGenerator : MonoBehaviour
                 }
             }
         }
-        // final step: set appearance of all cells between flow and overflow to "DeepWater"
+        // final step: set appearance of all cells between flow and overflow to "ShallowWater"
         foreach (Vector2Int cell in flow)
         {
             if (cell[0] > 0 && cell[1] > 0 && cell[0] <31 && cell[1] < 31)
             {
-                MapController.Instance.map[cell].terrain = TileController.TerrainType.DeepWater;
+                MapController.Instance.map[cell].terrain = TileController.TerrainType.ShallowWater;
                 MapController.Instance.map[cell].TileGen();
             }
         }
@@ -206,7 +204,7 @@ public class MapGenerator : MonoBehaviour
         {
             if (cell[0] > 0 && cell[1] > 0 && cell[0] < 31 && cell[1] < 31)
             {
-                MapController.Instance.map[cell].terrain = TileController.TerrainType.DeepWater;
+                MapController.Instance.map[cell].terrain = TileController.TerrainType.ShallowWater;
                 MapController.Instance.map[cell].TileGen();
             }
         }

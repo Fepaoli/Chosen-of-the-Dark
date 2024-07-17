@@ -47,6 +47,7 @@ public class TileController : MonoBehaviour
                 break;
             case TerrainType.ShallowWater:
                 moveMult = 2;
+                gameObject.GetComponent<SpriteRenderer>().color = Color.blue;
                 cover = 0;
                 walkable = true;
                 sightBlock = false;
